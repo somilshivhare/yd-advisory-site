@@ -100,10 +100,13 @@ const BlogCard = styled.div`
   }
 `;
 
-const BlogImage = styled.div`
+const BlogImage = styled.div.attrs(props => ({
+  style: {
+    backgroundImage: `url(${props.image})`
+  }
+}))`
   width: 100%;
   height: 250px;
-  background-image: url(${props => props.image});
   background-size: cover;
   background-position: center;
   position: relative;

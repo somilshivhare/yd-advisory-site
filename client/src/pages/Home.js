@@ -19,14 +19,18 @@ const HeroSection = styled.section`
   align-items: center;
 `;
 
-const HeroSlide = styled(motion.div)`
+const HeroSlide = styled(motion.div).attrs(props => ({
+  style: {
+    backgroundImage: `linear-gradient(135deg, rgba(20, 184, 166, 0.3) 0%, rgba(15, 118, 110, 0.4) 100%), url(${props.bgImage})`
+  }
+}))`
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(20, 184, 166, 0.3) 0%, rgba(15, 118, 110, 0.4) 100%), 
-              url(${props => props.bgImage}) center/cover;
+  background-size: cover;
+  background-position: center;
   color: ${props => props.theme.colors.white};
   padding: ${props => props.theme.spacing[20]} 0;
   text-align: center;
@@ -42,6 +46,8 @@ const HeroContent = styled.div`
   position: relative;
   z-index: 2;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  box-sizing: border-box;
   
   h1 {
     font-size: 4rem;
@@ -50,13 +56,16 @@ const HeroContent = styled.div`
     font-weight: 800;
     line-height: 1.1;
     text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
     
     @media (max-width: ${props => props.theme.breakpoints.md}) {
       font-size: 3rem;
     }
     
     @media (max-width: ${props => props.theme.breakpoints.sm}) {
-      font-size: 2.5rem;
+      font-size: 2rem;
+      margin-bottom: ${props => props.theme.spacing[4]};
     }
   }
   
@@ -70,6 +79,8 @@ const HeroContent = styled.div`
     margin-right: auto;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     font-weight: 500;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
     
     @media (max-width: ${props => props.theme.breakpoints.md}) {
       font-size: 1.25rem;
@@ -77,6 +88,8 @@ const HeroContent = styled.div`
     
     @media (max-width: ${props => props.theme.breakpoints.sm}) {
       font-size: 1rem;
+      margin-bottom: ${props => props.theme.spacing[6]};
+      padding: 0 ${props => props.theme.spacing[2]};
     }
   }
 `;
@@ -169,11 +182,15 @@ const CtaButtons = styled.div`
   gap: ${props => props.theme.spacing[4]};
   justify-content: center;
   flex-wrap: wrap;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
   
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
     flex-direction: column;
     align-items: center;
     gap: ${props => props.theme.spacing[3]};
+    padding: 0 ${props => props.theme.spacing[4]};
   }
 `;
 
@@ -226,9 +243,11 @@ const PrimaryButton = styled(Link)`
   }
   
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
-    min-width: 250px;
+    min-width: 280px;
+    max-width: 100%;
     padding: 16px 32px;
     font-size: 1rem;
+    width: 100%;
   }
 `;
 
@@ -259,9 +278,11 @@ const SecondaryButton = styled(Link)`
   }
   
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
-    min-width: 250px;
+    min-width: 280px;
+    max-width: 100%;
     padding: 14px 28px;
     font-size: 1rem;
+    width: 100%;
   }
 `;
 
@@ -371,10 +392,13 @@ const ServiceCard = styled.div`
   }
 `;
 
-const ServiceImage = styled.div`
+const ServiceImage = styled.div.attrs(props => ({
+  style: {
+    backgroundImage: `url(${props.image})`
+  }
+}))`
   width: 100%;
   height: 200px;
-  background-image: url(${props => props.image});
   background-size: cover;
   background-position: center;
   position: relative;
@@ -601,6 +625,10 @@ const TeamShowcaseGrid = styled.div`
     grid-template-columns: 1fr;
     gap: ${props => props.theme.spacing[8]};
   }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    gap: ${props => props.theme.spacing[6]};
+  }
 `;
 
 const TeamShowcaseContent = styled.div`
@@ -609,9 +637,12 @@ const TeamShowcaseContent = styled.div`
     color: ${props => props.theme.colors.primary[800]};
     margin-bottom: ${props => props.theme.spacing[6]};
     font-weight: 800;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
     
     @media (max-width: ${props => props.theme.breakpoints.sm}) {
-      font-size: ${props => props.theme.fontSizes['3xl']};
+      font-size: ${props => props.theme.fontSizes['2xl']};
+      margin-bottom: ${props => props.theme.spacing[4]};
     }
   }
   
@@ -620,6 +651,13 @@ const TeamShowcaseContent = styled.div`
     color: ${props => props.theme.colors.gray[600]};
     line-height: 1.6;
     margin-bottom: ${props => props.theme.spacing[8]};
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    
+    @media (max-width: ${props => props.theme.breakpoints.sm}) {
+      font-size: ${props => props.theme.fontSizes.base};
+      margin-bottom: ${props => props.theme.spacing[6]};
+    }
   }
 `;
 
@@ -631,22 +669,39 @@ const TeamMemberCard = styled.div`
   box-shadow: ${props => props.theme.shadows.lg};
   border: 1px solid ${props => props.theme.colors.gray[200]};
   transition: all ${props => props.theme.transitions.base};
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
   
   &:hover {
     transform: translateY(-8px);
     box-shadow: ${props => props.theme.shadows.xl};
   }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    padding: ${props => props.theme.spacing[6]};
+    max-width: 100%;
+  }
 `;
 
-const TeamMemberImage = styled.div`
+const TeamMemberImage = styled.div.attrs(props => ({
+  style: {
+    backgroundImage: `url(${props.image})`
+  }
+}))`
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background-image: url(${props => props.image});
   background-size: cover;
   background-position: center;
   margin: 0 auto ${props => props.theme.spacing[4]};
   border: 4px solid ${props => props.theme.colors.primary[200]};
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto ${props => props.theme.spacing[3]};
+  }
 `;
 
 const TeamMemberName = styled.h3`

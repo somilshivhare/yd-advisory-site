@@ -86,9 +86,12 @@ const HeaderContent = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 ${props => props.theme.spacing[4]};
+  width: 100%;
   
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
     padding: 0 ${props => props.theme.spacing[3]};
+    flex-wrap: nowrap;
+    min-width: 0;
   }
 `;
 
@@ -97,10 +100,13 @@ const Logo = styled(Link)`
   align-items: center;
   gap: ${props => props.theme.spacing[3]};
   text-decoration: none;
+  flex-shrink: 0;
+  min-width: 0;
   
   img {
     height: 50px;
     width: auto;
+    max-width: 100%;
   }
   
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
@@ -220,6 +226,11 @@ const MobileMenuButton = styled.button`
   padding: ${props => props.theme.spacing[2]};
   border-radius: ${props => props.theme.borderRadius.md};
   transition: all ${props => props.theme.transitions.fast};
+  flex-shrink: 0;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
   
   &:hover {
     background: ${props => props.theme.colors.gray[100]};
@@ -227,12 +238,14 @@ const MobileMenuButton = styled.button`
   }
   
   @media (max-width: ${props => props.theme.breakpoints.lg}) {
-    display: block;
+    display: flex;
   }
   
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
     font-size: ${props => props.theme.fontSizes.xl};
     padding: ${props => props.theme.spacing[1]};
+    min-width: 40px;
+    min-height: 40px;
   }
 `;
 
@@ -242,8 +255,10 @@ const MobileMenu = styled(motion.div)`
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background: ${props => props.theme.colors.primary[900]};
-  z-index: ${props => props.theme.zIndex.modal};
+  z-index: 9999;
   padding: ${props => props.theme.spacing[8]} ${props => props.theme.spacing[4]};
   overflow-y: auto;
   

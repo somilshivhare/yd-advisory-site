@@ -2,8 +2,6 @@ import { createGlobalStyle } from 'styled-components';
 import theme from './theme';
 
 const GlobalStyle = createGlobalStyle`
-  /* Import Google Fonts */
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
   /* Reset and Base Styles */
   * {
@@ -26,6 +24,8 @@ const GlobalStyle = createGlobalStyle`
     background-color: ${theme.colors.white};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    width: 100%;
   }
 
   /* Typography */
@@ -39,22 +39,37 @@ const GlobalStyle = createGlobalStyle`
 
   h1 {
     font-size: ${theme.fontSizes['5xl']};
+    word-wrap: break-word;
+    overflow-wrap: break-word;
     @media (max-width: ${theme.breakpoints.md}) {
       font-size: ${theme.fontSizes['4xl']};
+    }
+    @media (max-width: ${theme.breakpoints.sm}) {
+      font-size: ${theme.fontSizes['3xl']};
     }
   }
 
   h2 {
     font-size: ${theme.fontSizes['4xl']};
+    word-wrap: break-word;
+    overflow-wrap: break-word;
     @media (max-width: ${theme.breakpoints.md}) {
       font-size: ${theme.fontSizes['3xl']};
+    }
+    @media (max-width: ${theme.breakpoints.sm}) {
+      font-size: ${theme.fontSizes['2xl']};
     }
   }
 
   h3 {
     font-size: ${theme.fontSizes['3xl']};
+    word-wrap: break-word;
+    overflow-wrap: break-word;
     @media (max-width: ${theme.breakpoints.md}) {
       font-size: ${theme.fontSizes['2xl']};
+    }
+    @media (max-width: ${theme.breakpoints.sm}) {
+      font-size: ${theme.fontSizes.xl};
     }
   }
 

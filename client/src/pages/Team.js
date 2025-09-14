@@ -21,15 +21,24 @@ const HeroContent = styled.div`
   max-width: 800px;
   margin: 0 auto;
   padding: 0 ${props => props.theme.spacing[4]};
+  width: 100%;
+  box-sizing: border-box;
   
   h1 {
     font-size: 3rem;
     margin-bottom: ${props => props.theme.spacing[6]};
     color: ${props => props.theme.colors.white};
     font-weight: 800;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
     
     @media (max-width: ${props => props.theme.breakpoints.md}) {
       font-size: 2.5rem;
+    }
+    
+    @media (max-width: ${props => props.theme.breakpoints.sm}) {
+      font-size: 2rem;
+      margin-bottom: ${props => props.theme.spacing[4]};
     }
   }
   
@@ -37,6 +46,12 @@ const HeroContent = styled.div`
     font-size: 1.25rem;
     color: ${props => props.theme.colors.gray[200]};
     line-height: 1.6;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    
+    @media (max-width: ${props => props.theme.breakpoints.sm}) {
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -49,6 +64,12 @@ const SectionContent = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 ${props => props.theme.spacing[4]};
+  width: 100%;
+  box-sizing: border-box;
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    padding: 0 ${props => props.theme.spacing[3]};
+  }
 `;
 
 const SectionHeader = styled.div`
@@ -59,6 +80,13 @@ const SectionHeader = styled.div`
     font-size: ${props => props.theme.fontSizes['4xl']};
     color: ${props => props.theme.colors.primary[800]};
     margin-bottom: ${props => props.theme.spacing[4]};
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    
+    @media (max-width: ${props => props.theme.breakpoints.sm}) {
+      font-size: ${props => props.theme.fontSizes['2xl']};
+      margin-bottom: ${props => props.theme.spacing[3]};
+    }
   }
   
   p {
@@ -66,6 +94,12 @@ const SectionHeader = styled.div`
     color: ${props => props.theme.colors.gray[600]};
     max-width: 600px;
     margin: 0 auto;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    
+    @media (max-width: ${props => props.theme.breakpoints.sm}) {
+      font-size: ${props => props.theme.fontSizes.base};
+    }
   }
 `;
 
@@ -101,11 +135,14 @@ const TeamCard = styled.div`
   }
 `;
 
-const TeamImage = styled.div`
+const TeamImage = styled.div.attrs(props => ({
+  style: {
+    backgroundImage: `url(${props.image})`
+  }
+}))`
   width: 300px;
   height: 300px;
   border-radius: ${props => props.theme.borderRadius.lg};
-  background-image: url(${props => props.image});
   background-size: cover;
   background-position: center;
   margin: 0 auto ${props => props.theme.spacing[6]};
