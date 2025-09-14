@@ -1,0 +1,31 @@
+/* Circular Favicon Styling */
+
+/* Make favicon appear circular in browser tabs */
+link[rel="icon"] {
+  border-radius: 50% !important;
+}
+
+/* For browsers that support mask-icon (Safari) */
+link[rel="mask-icon"] {
+  border-radius: 50%;
+}
+
+/* Additional styling for circular appearance */
+.favicon-circular {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* Ensure the favicon appears circular across different browsers */
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+  link[rel="icon"] {
+    border-radius: 50%;
+  }
+}
+
+/* For high DPI displays */
+@media screen and (-webkit-min-device-pixel-ratio: 3) {
+  link[rel="icon"] {
+    border-radius: 50%;
+  }
+}
