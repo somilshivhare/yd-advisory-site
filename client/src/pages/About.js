@@ -78,8 +78,11 @@ const TextContent = styled.div`
 `;
 
 const ImageContent = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  
   img {
-    width: 100%;
+    width: 90%;
     height: auto;
     border-radius: ${props => props.theme.borderRadius.xl};
     box-shadow: ${props => props.theme.shadows.xl};
@@ -569,57 +572,84 @@ const About = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            About Yashaswi Das
+            About Us
           </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Founder & Principal of YD Advisory - A valuation and transactions specialist 
-            who blends quality with boutique speed to help founders, boards, investors, 
-            and family offices make decisive moves.
-          </motion.p>
+          {/* description removed as requested */}
         </HeroContent>
       </HeroSection>
 
       {/* Founder Section */}
       <FounderSection>
         <FounderContent>
-          <FounderHeader>
+          <TwoColumnGrid>
+            <div>
               <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
               >
-              Founder
+                Founder
               </motion.h2>
-            <motion.h3
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              Yashaswi Das — Founder & Principal
-            </motion.h3>
+              <motion.h3
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                viewport={{ once: true }}
+                style={{ color: '#0d9488', marginBottom: '1rem' }}
+              >
+                Yashaswi Das — Founder & Principal
+              </motion.h3>
               <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
                 viewport={{ once: true }}
+                style={{ marginBottom: '0.75rem' }}
               >
-              Yashaswi is a valuation and transactions specialist who blends quality with boutique speed to help founders, boards, investors, and family offices make decisive moves. Her experience spans business & IP valuations (incl. 409A and complex securities), M&A execution, financial modelling, and due diligence, producing IVSC-aligned, audit-ready outputs that stand up in boardrooms and negotiations.
+                Yashaswi is a valuation and transactions specialist who blends quality with boutique speed to help founders, boards, investors, and family offices make decisive moves.
               </motion.p>
               <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-            >
-              Previously at JPMorgan (Private Equity analysis & valuation) and Dubai Holding (M&A execution & deal structuring), Yashaswi now leads a licensed practice in Dubai, supporting clients from origination to post-deal integration.
-            </motion.p>
-          </FounderHeader>
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.25 }}
+                viewport={{ once: true }}
+                style={{ marginBottom: '0.75rem' }}
+              >
+                Her experience spans business & IP valuations (incl. 409A and complex securities), M&A execution, financial modelling, and due diligence—producing IVSC‑aligned, audit‑ready outputs that stand up in boardrooms and negotiations.
+              </motion.p>
+              <motion.ul
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.35 }}
+                viewport={{ once: true }}
+                style={{ paddingLeft: '1rem', margin: 0, color: '#4b5563', lineHeight: 1.6 }}
+              >
+                <li>Defensible valuations: 409A, complex securities, IP/PPA</li>
+                <li>Decision‑ready models: three‑statement, scenarios, Monte‑Carlo</li>
+                <li>Hands‑on M&A: red‑flag diligence, SPA/PPA, integration</li>
+              </motion.ul>
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.45 }}
+                viewport={{ once: true }}
+                style={{ marginTop: '0.75rem' }}
+              >
+                Previously at JPMorgan (Private Equity analysis & valuation) and Dubai Holding (M&A execution & deal structuring), Yashaswi now leads a licensed practice in Dubai, supporting clients from origination to post‑deal integration.
+              </motion.p>
+            </div>
+            <ImageContent>
+              <motion.img
+                src="/images/team/yashaswi_das.png"
+                alt="Yashaswi Das"
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+              />
+            </ImageContent>
+          </TwoColumnGrid>
         </FounderContent>
       </FounderSection>
 
@@ -709,138 +739,7 @@ const About = () => {
         </WhatSheDoesContent>
       </WhatSheDoesSection>
 
-      {/* Track Record Section */}
-      <TrackRecordSection>
-        <TrackRecordContent>
-          <SectionHeader>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              Track Record
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              Proven results across diverse sectors and geographies
-            </motion.p>
-          </SectionHeader>
-
-          <StatsGrid>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <StatCard>
-                <h3>50+</h3>
-                <p>Clients</p>
-              </StatCard>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              <StatCard>
-                <h3>$100M+</h3>
-                <p>Raised/Structured/Unlocked</p>
-              </StatCard>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              <StatCard>
-                <h3>10+</h3>
-                <p>Geographies</p>
-              </StatCard>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-            >
-              <StatCard>
-                <h3>15+</h3>
-                <p>Sectors</p>
-              </StatCard>
-            </motion.div>
-          </StatsGrid>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                viewport={{ once: true }}
-              >
-            <p style={{ textAlign: 'center', color: '#6B7280', fontSize: '1.1rem', marginBottom: '3rem' }}>
-              Deals supported in the USD 2m–50m range with board-level materials, robust diligence, and cross-border structures.
-            </p>
-          </motion.div>
-
-          <OutcomesSection>
-            <motion.h3
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              style={{ fontSize: '2rem', color: '#134E48', marginBottom: '2rem', textAlign: 'center' }}
-            >
-              Selected Outcomes
-            </motion.h3>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-            >
-              <OutcomeCard>
-                <h4>FinTech Capital Raise</h4>
-                <p>Rebuilt unit economics, ran 12-scenario DCF/409A; closed at USD 28m pre-money (+12%), with founders keeping +4% equity.</p>
-              </OutcomeCard>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              <OutcomeCard>
-                <h4>Healthcare Exit</h4>
-                <p>Led red-flag QoE, carved non-core real estate, modelled Black-Scholes earn-out & PPA; +AED 7m SPA uplift, claw-backs ring-fenced.</p>
-              </OutcomeCard>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              <OutcomeCard>
-                <h4>Logistics Refinancing</h4>
-                <p>IVSC-compliant valuations + Monte-Carlo sensitivity + sale-leaseback structure; LTV 55%→70%, AED 40m unlocked without dilution.</p>
-              </OutcomeCard>
-            </motion.div>
-          </OutcomesSection>
-        </TrackRecordContent>
-      </TrackRecordSection>
+      {/* Track Record section removed as requested */}
 
       {/* How She Works Section */}
       <HowSheWorksSection>
@@ -916,9 +815,9 @@ const About = () => {
         </HowSheWorksContent>
       </HowSheWorksSection>
 
-      {/* Career Timeline Section */}
-      <CareerTimelineSection>
-        <CareerTimelineContent>
+      {/* Core Values Section (replaces Career Timeline) */}
+      <ValuesSection>
+        <SectionContent>
           <SectionHeader>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
@@ -926,67 +825,61 @@ const About = () => {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              Founder's Career Timeline
+              Core Values
             </motion.h2>
-          </SectionHeader>
-
-          <TimelineContainer>
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <TimelineItem>
-                <TimelineIcon>
-                  <FiAward />
-                </TimelineIcon>
-                <TimelineContent>
-                  <h3>Licensed Independent Consultant (Dubai)</h3>
-                  <h4>Founder & Principal</h4>
-                  <p>Transactions, M&A, Valuations & Fractional CFO</p>
-                </TimelineContent>
-              </TimelineItem>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true }}
             >
-              <TimelineItem>
-                <TimelineIcon>
-                  <FiBriefcase />
-                </TimelineIcon>
-                <TimelineContent>
-                  <h3>Dubai Holding / Dubai Asset Management</h3>
-                  <h4>Manager</h4>
-                  <p>M&A execution & transaction advisory</p>
-                </TimelineContent>
-              </TimelineItem>
+              We run YD Advisory on a simple promise: credible numbers, clear storytelling, and execution that moves deals forward.
+            </motion.p>
+          </SectionHeader>
+
+          <ValuesGrid>
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} viewport={{ once: true }}>
+              <ValueCard>
+                <FiUsers />
+                <h3>Respect</h3>
+                <p>We treat every founder, board, and counter‑party with professionalism. No jargon for its own sake—only useful, decision‑ready work.</p>
+              </ValueCard>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              <TimelineItem>
-                <TimelineIcon>
-                  <FiTrendingUp />
-                </TimelineIcon>
-                <TimelineContent>
-                  <h3>JPMorgan Chase</h3>
-                  <h4>Senior Analyst</h4>
-                  <p>Private Equity analysis & valuation</p>
-                </TimelineContent>
-              </TimelineItem>
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.05 }} viewport={{ once: true }}>
+              <ValueCard>
+                <FiStar />
+                <h3>Professionalism</h3>
+                <p>IVSC‑aligned valuations and investor‑grade models. We stand behind our assumptions and documentation in boardrooms and audits.</p>
+              </ValueCard>
             </motion.div>
-          </TimelineContainer>
-        </CareerTimelineContent>
-      </CareerTimelineSection>
+
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} viewport={{ once: true }}>
+              <ValueCard>
+                <FiClock />
+                <h3>Responsibility</h3>
+                <p>We deliver on time and stay accountable end‑to‑end—no hand‑offs, no surprises, fully transparent progress and risks.</p>
+              </ValueCard>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }} viewport={{ once: true }}>
+              <ValueCard>
+                <FiShield />
+                <h3>Integrity</h3>
+                <p>Numbers must be defensible. We say what the data supports—even when it’s hard—and never push work clients don’t need.</p>
+              </ValueCard>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} viewport={{ once: true }}>
+              <ValueCard>
+                <FiTarget />
+                <h3>Competency</h3>
+                <p>Hands‑on senior execution in valuations, M&A, and CFO support. If something is outside scope, we say so—and bring the right partner.</p>
+              </ValueCard>
+            </motion.div>
+          </ValuesGrid>
+        </SectionContent>
+      </ValuesSection>
 
       {/* CTA Section */}
       <CtaSection>

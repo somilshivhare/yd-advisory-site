@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiPhone, FiMail, FiMapPin, FiClock, FiLinkedin, FiTwitter, FiFacebook } from 'react-icons/fi';
+import { FiArrowRight, FiPhone, FiMail, FiMapPin, FiClock, FiLinkedin } from 'react-icons/fi';
 
 const FooterContainer = styled.footer`
   background: ${props => props.theme.colors.primary[900]};
@@ -155,17 +155,17 @@ const SocialLinks = styled.div`
   margin-top: ${props => props.theme.spacing[4]};
   
   a {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
+    gap: ${props => props.theme.spacing[2]};
+    padding: ${props => props.theme.spacing[2]} ${props => props.theme.spacing[3]};
     background: ${props => props.theme.colors.gray[800]};
     color: ${props => props.theme.colors.gray[300]};
-    border-radius: 50%;
+    border-radius: 9999px;
     text-decoration: none;
     transition: all ${props => props.theme.transitions.fast};
-    
+    line-height: 1;
+
     &:hover {
       background: ${props => props.theme.colors.primary[600]};
       color: ${props => props.theme.colors.white};
@@ -241,14 +241,9 @@ const Footer = () => {
               financial solutions tailored to your unique needs and goals.
             </p>
             <SocialLinks>
-              <a href="https://linkedin.com/company/yd-advisory" aria-label="LinkedIn">
+              <a href="https://linkedin.com/company/yd-advisory" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                 <FiLinkedin />
-              </a>
-              <a href="https://twitter.com/ydadvisory" aria-label="Twitter">
-                <FiTwitter />
-              </a>
-              <a href="https://facebook.com/ydadvisory" aria-label="Facebook">
-                <FiFacebook />
+                <span>LinkedIn</span>
               </a>
             </SocialLinks>
           </FooterSection>

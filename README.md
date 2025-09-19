@@ -82,13 +82,30 @@ yd-advisory/
 
 ### Installation
 
-1. **Clone the repository**
+1. **Create a new GitHub repo and push code**
    ```bash
-   git clone <repository-url>
-   cd yd-advisory
+   # Initialize git (if not already)
+   git init
+   git remote add origin https://github.com/<your-username>/<your-repo>.git
+   
+   # Optional: set default branch to main
+   git branch -M main
+   
+   # Commit current code
+   git add -A
+   git commit -m "Initial commit: YD Advisory"
+   
+   # Push to GitHub
+   git push -u origin main
    ```
 
-2. **Install dependencies**
+2. **Clone the repository (fresh machine)**
+   ```bash
+   git clone https://github.com/<your-username>/<your-repo>.git
+   cd <your-repo>
+   ```
+
+3. **Install dependencies**
    ```bash
    # Install root dependencies
    npm install
@@ -102,7 +119,7 @@ yd-advisory/
    npm install
    ```
 
-3. **Environment Setup**
+4. **Environment Setup**
    
    Create `.env` files in both client and server directories:
    
@@ -121,7 +138,7 @@ yd-advisory/
    REACT_APP_API_URL=http://localhost:5000/api
    ```
 
-4. **Start the application**
+5. **Start the application**
    
    **Development mode (recommended)**
    ```bash
@@ -140,10 +157,29 @@ yd-advisory/
    npm start
    ```
 
-5. **Access the application**
+6. **Access the application**
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:5000/api
    - API Health Check: http://localhost:5000/api/health
+
+### Common Git Commands
+
+```bash
+# Check status
+git status
+
+# Pull latest changes
+git pull origin main
+
+# Create and switch to a new branch
+git checkout -b feature/my-change
+
+# Commit and push
+git add -A && git commit -m "Describe your change" && git push -u origin feature/my-change
+
+# Merge via PR on GitHub, then pull
+git checkout main && git pull origin main
+```
 
 ## 📚 API Endpoints
 

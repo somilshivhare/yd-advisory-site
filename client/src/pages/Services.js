@@ -23,6 +23,7 @@ import {
 } from 'react-icons/fi';
 import SEO from '../components/SEO';
 import { serviceSchema } from '../utils/structuredData';
+import ValuationRequestForm from '../components/ValuationRequestForm';
 
 const ServicesContainer = styled.div`
   padding-top: 120px;
@@ -440,6 +441,124 @@ const CtaButton = styled(Link)`
   }
 `;
 
+// Subscription/Pricing section
+const PricingSection = styled.section`
+  padding: ${props => props.theme.spacing[20]} 0;
+  background: ${props => props.theme.colors.white};
+`;
+
+const PricingContent = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 ${props => props.theme.spacing[4]};
+`;
+
+const PricingHeader = styled.div`
+  text-align: center;
+  margin-bottom: ${props => props.theme.spacing[12]};
+  
+  h2 {
+    font-size: ${props => props.theme.fontSizes['5xl']};
+    color: ${props => props.theme.colors.primary[800]};
+    margin-bottom: ${props => props.theme.spacing[3]};
+    font-weight: ${props => props.theme.fontWeights.bold};
+  }
+  p {
+    font-size: ${props => props.theme.fontSizes.lg};
+    color: ${props => props.theme.colors.gray[600]};
+    max-width: 800px;
+    margin: 0 auto;
+  }
+`;
+
+const PricingGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: ${props => props.theme.spacing[8]};
+  
+  @media (max-width: ${props => props.theme.breakpoints.lg}) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const PricingCard = styled.div`
+  background: ${props => props.featured ? props.theme.colors.primary[50] : props.theme.colors.white};
+  border: 1px solid ${props => props.theme.colors.gray[200]};
+  border-radius: ${props => props.theme.borderRadius.xl};
+  padding: ${props => props.theme.spacing[8]};
+  box-shadow: ${props => props.featured ? props.theme.shadows.lg : props.theme.shadows.sm};
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+`;
+
+const Price = styled.div`
+  font-size: ${props => props.theme.fontSizes['3xl']};
+  color: ${props => props.theme.colors.primary[800]};
+  font-weight: ${props => props.theme.fontWeights.bold};
+  margin: ${props => props.theme.spacing[3]} 0 ${props => props.theme.spacing[6]};
+`;
+
+const PricingButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${props => props.theme.spacing[2]};
+  padding: ${props => props.theme.spacing[3]} ${props => props.theme.spacing[6]};
+  border-radius: ${props => props.theme.borderRadius.lg};
+  background: linear-gradient(135deg, ${props => props.theme.colors.primary[600]}, ${props => props.theme.colors.primary[700]});
+  color: ${props => props.theme.colors.white};
+  text-decoration: none;
+  font-weight: ${props => props.theme.fontWeights.semibold};
+  margin-top: auto;
+  transition: all ${props => props.theme.transitions.base};
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(20, 184, 166, 0.4);
+  }
+`;
+
+const PricingList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0 0 ${props => props.theme.spacing[6]} 0;
+  
+  li {
+    display: flex;
+    align-items: center;
+    gap: ${props => props.theme.spacing[2]};
+    color: ${props => props.theme.colors.gray[700]};
+    margin-bottom: ${props => props.theme.spacing[2]};
+    font-size: ${props => props.theme.fontSizes.sm};
+  }
+`;
+
+const ServiceFormSection = styled.section`
+  padding: ${props => props.theme.spacing[16]} 0;
+  background: ${props => props.theme.colors.gray[50]};
+`;
+
+const ServiceFormHeader = styled.div`
+  text-align: center;
+  margin-bottom: ${props => props.theme.spacing[12]};
+  
+  h2 {
+    font-size: ${props => props.theme.fontSizes['4xl']};
+    color: ${props => props.theme.colors.primary[800]};
+    margin-bottom: ${props => props.theme.spacing[4]};
+    font-weight: 700;
+  }
+  p {
+    font-size: ${props => props.theme.fontSizes.lg};
+    color: ${props => props.theme.colors.gray[600]};
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+`;
+
 
 const Services = () => {
   // Comprehensive Services Data
@@ -545,6 +664,30 @@ const Services = () => {
     }
   ];
 
+  // Priority: Business Valuation, Financial Modeling & Forecasting, Fractional CFO & Board Support, M&A Advisory
+  const priorityOrder = [
+    'business valuation',
+    'financial modeling & forecasting',
+    'fractional cfo & board support',
+    'm&a advisory'
+  ];
+  const titleAliases = {
+    'specialized valuation': 'business valuation',
+    'financial modelling & forecasting': 'financial modeling & forecasting',
+    'fractional cfo & board support': 'fractional cfo & board support',
+    'm&a advisory (buy- & sell-side)': 'm&a advisory'
+  };
+  const prioritizedServices = [...services].sort((a, b) => {
+    const aKey = (titleAliases[a.title.toLowerCase()] || a.title.toLowerCase());
+    const bKey = (titleAliases[b.title.toLowerCase()] || b.title.toLowerCase());
+    const aIdx = priorityOrder.indexOf(aKey);
+    const bIdx = priorityOrder.indexOf(bKey);
+    const aPriority = aIdx === -1 ? Number.MAX_SAFE_INTEGER : aIdx;
+    const bPriority = bIdx === -1 ? Number.MAX_SAFE_INTEGER : bIdx;
+    if (aPriority !== bPriority) return aPriority - bPriority;
+    return a.id - b.id;
+  });
+
   return (
     <ServicesContainer>
       <SEO
@@ -598,7 +741,7 @@ const Services = () => {
           </CategoryHeader>
 
           <ServicesGrid>
-            {services.map((service, index) => (
+            {prioritizedServices.map((service, index) => (
               <motion.div
                 key={service.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -644,6 +787,81 @@ const Services = () => {
           </ServicesGrid>
         </SectionContent>
       </CategorySection>
+
+      {/* Pricing Plans Section */}
+      <PricingSection>
+        <PricingContent>
+          <PricingHeader>
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              Our Service Packages
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              Choose a package that fits your current stage. All work is senior‑led and audit‑ready.
+            </motion.p>
+          </PricingHeader>
+
+          <PricingGrid>
+            <PricingCard>
+              <h3 style={{ margin: 0, color: '#134E48' }}>Valuation Basic</h3>
+              <p style={{ color: '#6B7280', marginTop: 4 }}>For new businesses</p>
+              <Price>From $1000</Price>
+              <PricingList>
+                <li>Business plan review</li>
+                <li>Basic financial model</li>
+                <li>3‑year forecasts</li>
+              </PricingList>
+              <PricingButton href="#service-form">I want it! <FiArrowRight /></PricingButton>
+            </PricingCard>
+
+            <PricingCard featured>
+              <h3 style={{ margin: 0, color: '#134E48' }}>Valuation Advanced</h3>
+              <p style={{ color: '#6B7280', marginTop: 4 }}>Complete solution for scaling businesses</p>
+              <Price>From $1500</Price>
+              <PricingList>
+                <li>Includes all from Valuation Starter</li>
+                <li>Advanced financial modelling</li>
+                <li>Investor materials</li>
+                <li>3× strategy sessions</li>
+              </PricingList>
+              <PricingButton href="#service-form">I want it! <FiArrowRight /></PricingButton>
+            </PricingCard>
+
+            <PricingCard>
+              <h3 style={{ margin: 0, color: '#134E48' }}>Custom Advisory</h3>
+              <p style={{ color: '#6B7280', marginTop: 4 }}>Personalized advisory services</p>
+              <Price>Upon consultation</Price>
+              <PricingList>
+                <li>Everything from Forge Growth</li>
+                <li>Strategic planning</li>
+                <li>Custom KPIs & dashboards</li>
+                <li>Ongoing support</li>
+              </PricingList>
+              <PricingButton href="#service-form">I want it! <FiArrowRight /></PricingButton>
+            </PricingCard>
+          </PricingGrid>
+        </PricingContent>
+      </PricingSection>
+
+      {/* Embedded Valuation Form (from Contact page) */}
+      <ServiceFormSection id="service-form">
+        <PricingContent>
+          <ServiceFormHeader>
+            <h2>Request A Valuation</h2>
+            <p>Submit your details and we’ll follow up within 48 hours with next steps or a complimentary valuation.</p>
+          </ServiceFormHeader>
+          <ValuationRequestForm onSubmit={async (data) => { console.log('Valuation request data:', data); }} />
+        </PricingContent>
+      </ServiceFormSection>
 
       {/* Tools, Standards & Assurance Section */}
       <ToolsSection>

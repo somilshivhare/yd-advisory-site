@@ -190,6 +190,7 @@ const FormGroup = styled.div`
     border-radius: ${props => props.theme.borderRadius.md};
     font-size: ${props => props.theme.fontSizes.base};
     transition: all ${props => props.theme.transitions.fast};
+    &.error { border-color: ${props => props.theme.colors.error || '#ef4444'}; }
     
     &:focus {
       outline: none;
@@ -205,6 +206,11 @@ const FormGroup = styled.div`
   textarea {
     resize: vertical;
     min-height: 100px;
+  }
+  .error-text {
+    color: ${props => props.theme.colors.error || '#ef4444'};
+    font-size: 0.85rem;
+    margin-top: 6px;
   }
 `;
 
@@ -252,6 +258,7 @@ const ValuationCalculator = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -263,13 +270,24 @@ const ValuationCalculator = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Basic validation
+    const nextErrors = {};
+    const emailRe = /^\S+@\S+\.\S+$/;
+    if (!formData.firstName.trim()) nextErrors.firstName = 'First name is required';
+    if (!formData.lastName.trim()) nextErrors.lastName = 'Last name is required';
+    if (!formData.companyName.trim()) nextErrors.companyName = 'Company name is required';
+    if (!emailRe.test(formData.email)) nextErrors.email = 'Enter a valid email';
+    if (!formData.industry) nextErrors.industry = 'Select your industry';
+    if (!formData.revenue) nextErrors.revenue = 'Select revenue range';
+
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
     setIsSubmitting(true);
-    
-    // Simulate form submission
     setTimeout(() => {
       setIsSubmitting(false);
       alert('Thank you! We will contact you within 24 hours with your business valuation.');
-    }, 2000);
+    }, 1200);
   };
 
   return (
@@ -366,8 +384,9 @@ const ValuationCalculator = () => {
                         value={formData.firstName}
                         onChange={handleInputChange}
                         placeholder="First name"
-                        required
+                        className={errors.firstName ? 'error' : ''}
                       />
+                      {errors.firstName && (<div className="error-text">{errors.firstName}</div>)}
                     </FormGroup>
                     
                     <FormGroup>
@@ -379,8 +398,9 @@ const ValuationCalculator = () => {
                         value={formData.lastName}
                         onChange={handleInputChange}
                         placeholder="Last name"
-                        required
+                        className={errors.lastName ? 'error' : ''}
                       />
+                      {errors.lastName && (<div className="error-text">{errors.lastName}</div>)}
                     </FormGroup>
                   </FormGrid>
                   
@@ -393,8 +413,9 @@ const ValuationCalculator = () => {
                       value={formData.companyName}
                       onChange={handleInputChange}
                       placeholder="Your company name"
-                      required
+                      className={errors.companyName ? 'error' : ''}
                     />
+                    {errors.companyName && (<div className="error-text">{errors.companyName}</div>)}
                   </FormGroup>
                   
                   <FormGrid>
@@ -407,8 +428,9 @@ const ValuationCalculator = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="your@email.com"
-                        required
+                        className={errors.email ? 'error' : ''}
                       />
+                      {errors.email && (<div className="error-text">{errors.email}</div>)}
                     </FormGroup>
                     
                     <FormGroup>
@@ -438,7 +460,7 @@ const ValuationCalculator = () => {
                       name="industry"
                       value={formData.industry}
                       onChange={handleInputChange}
-                      required
+                      className={errors.industry ? 'error' : ''}
                     >
                       <option value="">Select your industry</option>
                       <option value="technology">Technology</option>
@@ -461,7 +483,7 @@ const ValuationCalculator = () => {
                         name="revenue"
                         value={formData.revenue}
                         onChange={handleInputChange}
-                        required
+                        className={errors.revenue ? 'error' : ''}
                       >
                         <option value="">Select revenue range</option>
                         <option value="0-100k">$0 - $100,000</option>

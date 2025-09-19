@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiPhone, FiMail, FiMapPin } from 'react-icons/fi';
 import SEO from '../components/SEO';
 import { localBusinessSchema } from '../utils/structuredData';
-import ValuationRequestForm from '../components/ValuationRequestForm';
+// Removed ValuationRequestForm; using a lightweight Get In Touch form instead
 
 const ContactContainer = styled.div`
   padding-top: 120px;
@@ -115,6 +115,61 @@ const ValuationSectionHeader = styled.div`
   }
 `;
 
+const ContactForm = styled.form`
+  max-width: 800px;
+  margin: 0 auto;
+  background: ${props => props.theme.colors.white};
+  border: 1px solid ${props => props.theme.colors.gray[200]};
+  border-radius: ${props => props.theme.borderRadius.xl};
+  padding: ${props => props.theme.spacing[8]};
+  box-shadow: ${props => props.theme.shadows.sm};
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: ${props => props.theme.spacing[4]};
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    grid-template-columns: 1fr;
+    padding: ${props => props.theme.spacing[6]};
+  }
+  
+  label {
+    font-weight: 600;
+    color: ${props => props.theme.colors.gray[700]};
+    margin-bottom: ${props => props.theme.spacing[2]};
+    display: block;
+  }
+  input, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid ${props => props.theme.colors.gray[300]};
+    border-radius: 10px;
+    font-size: 1rem;
+    &.error { border-color: ${props => props.theme.colors.error || '#ef4444'}; }
+  }
+  textarea {
+    grid-column: 1 / -1;
+    min-height: 140px;
+    resize: vertical;
+  }
+  button {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, ${props => props.theme.colors.primary[600]}, ${props => props.theme.colors.primary[700]});
+    color: ${props => props.theme.colors.white};
+    padding: 14px 20px;
+    border: none;
+    border-radius: ${props => props.theme.borderRadius.lg};
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .error-text {
+    grid-column: 1 / -1;
+    color: ${props => props.theme.colors.error || '#ef4444'};
+    font-size: 0.85rem;
+    margin-top: -6px;
+    margin-bottom: 10px;
+  }
+`;
+
 const MapSection = styled.section`
   padding: ${props => props.theme.spacing[16]} 0;
   background: ${props => props.theme.colors.white};
@@ -132,7 +187,30 @@ const MapContainer = styled.div`
 `;
 
 const Contact = () => {
+  const [errors, setErrors] = useState({});
 
+  const handleContactSubmit = (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const values = Object.fromEntries(data.entries());
+    const nextErrors = {};
+    const emailRe = /^\S+@\S+\.\S+$/;
+    const phoneRe = /^[+]?[-0-9 ()]{7,20}$/;
+
+    if (!values.firstName || values.firstName.trim().length < 2) nextErrors.firstName = 'Please enter at least 2 characters';
+    if (!values.lastName || values.lastName.trim().length < 2) nextErrors.lastName = 'Please enter at least 2 characters';
+    if (!values.email || !emailRe.test(values.email)) nextErrors.email = 'Enter a valid email address';
+    if (!values.phone || !phoneRe.test(values.phone)) nextErrors.phone = 'Enter a valid phone number';
+    if (!values.subject || values.subject.trim().length < 3) nextErrors.subject = 'Provide a subject (min 3 chars)';
+    if (!values.message || values.message.trim().length < 10) nextErrors.message = 'Provide a short message (min 10 chars)';
+
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length === 0) {
+      alert('Thanks! We will reach out shortly.');
+      form.reset();
+    }
+  };
   return (
     <ContactContainer>
       <SEO
@@ -225,7 +303,7 @@ const Contact = () => {
             viewport={{ once: true }}
           >
             <ValuationSectionHeader>
-              <h2>Request A Valuation</h2>
+              <h2>Request a Custom Proposal</h2>
               <p>
                 Get a professional business valuation from our expert team. 
                 We'll provide you with a comprehensive analysis tailored to your specific business needs.
@@ -239,13 +317,43 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <ValuationRequestForm 
-              onSubmit={async (data) => {
-                // Handle valuation form submission
-                console.log('Valuation request data:', data);
-                // You can integrate with your API here
-              }}
-            />
+            <ContactForm onSubmit={handleContactSubmit}>
+              <div>
+                <label htmlFor="firstName">First name</label>
+                <input id="firstName" name="firstName" className={errors.firstName ? 'error' : ''} placeholder="Enter your first name" />
+                {errors.firstName && (<div className="error-text">{errors.firstName}</div>)}
+              </div>
+              <div>
+                <label htmlFor="lastName">Last name</label>
+                <input id="lastName" name="lastName" className={errors.lastName ? 'error' : ''} placeholder="Enter your last name" />
+                {errors.lastName && (<div className="error-text">{errors.lastName}</div>)}
+              </div>
+              <div>
+                <label htmlFor="email">Email</label>
+                <input id="email" name="email" type="email" className={errors.email ? 'error' : ''} placeholder="your@email.com" />
+                {errors.email && (<div className="error-text">{errors.email}</div>)}
+              </div>
+              <div>
+                <label htmlFor="phone">Phone</label>
+                <input id="phone" name="phone" className={errors.phone ? 'error' : ''} placeholder="+971-XXXXXXX" />
+                {errors.phone && (<div className="error-text">{errors.phone}</div>)}
+              </div>
+              <div>
+                <label htmlFor="company">Company</label>
+                <input id="company" name="company" placeholder="Enter your company" />
+              </div>
+              <div>
+                <label htmlFor="subject">Subject</label>
+                <input id="subject" name="subject" className={errors.subject ? 'error' : ''} placeholder="How can we help?" />
+                {errors.subject && (<div className="error-text">{errors.subject}</div>)}
+              </div>
+              <div>
+                <label htmlFor="message">Message</label>
+                <textarea id="message" name="message" className={errors.message ? 'error' : ''} placeholder="Tell us about your requirements" />
+                {errors.message && (<div className="error-text">{errors.message}</div>)}
+              </div>
+              <button type="submit">Send Message</button>
+            </ContactForm>
           </motion.div>
         </SectionContent>
       </ValuationSection>

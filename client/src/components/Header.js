@@ -419,8 +419,6 @@ const Header = () => {
           </ContactInfo>
           <SocialLinks>
             <a href="https://linkedin.com/company/yd-advisory" aria-label="LinkedIn">LinkedIn</a>
-            <a href="https://twitter.com/ydadvisory" aria-label="Twitter">Twitter</a>
-            <a href="https://facebook.com/ydadvisory" aria-label="Facebook">Facebook</a>
           </SocialLinks>
         </TopBarContent>
       </TopBar>

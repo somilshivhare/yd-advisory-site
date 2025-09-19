@@ -36,6 +36,61 @@ const CalculatorSection = styled.section`
   padding-right: ${props => props.theme.spacing[4]};
 `;
 
+const CalculatorGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: ${props => props.theme.spacing[10]};
+  align-items: start;
+  
+  @media (min-width: 992px) {
+    grid-template-columns: 1.1fr 1fr;
+  }
+`;
+
+const LeftPane = styled.div`
+  color: ${props => props.theme.colors.primary[900]};
+  
+  h2 {
+    font-family: ${props => props.theme.fonts.display};
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: ${props => props.theme.colors.primary[800]};
+    margin-bottom: ${props => props.theme.spacing[4]};
+    line-height: 1.15;
+  }
+  
+  p {
+    font-size: 1.125rem;
+    color: ${props => props.theme.colors.gray[700]};
+    line-height: 1.7;
+    max-width: 640px;
+  }
+`;
+
+const StatRow = styled.div`
+  display: none;
+`;
+
+const StatBox = styled.div`
+  background: ${props => props.theme.colors.white};
+  border: 1px solid ${props => props.theme.colors.primary[200]};
+  border-radius: 12px;
+  padding: ${props => props.theme.spacing[5]};
+  text-align: left;
+  box-shadow: 0 6px 18px rgba(20, 184, 166, 0.08);
+  
+  .value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: ${props => props.theme.colors.primary[700]};
+    margin-bottom: ${props => props.theme.spacing[1]};
+  }
+  .label {
+    font-size: 0.85rem;
+    color: ${props => props.theme.colors.gray[600]};
+  }
+`;
+
 const SectionHeader = styled.div`
   text-align: center;
   margin-bottom: ${props => props.theme.spacing[12]};
@@ -210,12 +265,19 @@ const InputGroup = styled.div`
     border-radius: 8px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
+    &.error { border-color: ${props => props.theme.colors.error || '#ef4444'}; }
     
     &:focus {
       outline: none;
       border-color: ${props => props.theme.colors.primary[500]};
       box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
     }
+  }
+
+  .error-text {
+    color: ${props => props.theme.colors.error || '#ef4444'};
+    font-size: 0.85rem;
+    margin-top: 6px;
   }
 `;
 
@@ -456,6 +518,7 @@ const Calculator = () => {
     runway: ''
   });
   const [valuation, setValuation] = useState(null);
+  const [errors, setErrors] = useState({});
 
   const steps = [
     { id: 1, title: 'Company Info', description: 'Basic company information' },
@@ -492,9 +555,47 @@ const Calculator = () => {
     }));
   };
 
+  const validateStep = (step) => {
+    const nextErrors = {};
+    const requiredByStep = {
+      1: ['companyName', 'country', 'industry', 'businessStage'],
+      2: ['revenue', 'employees', 'revenueModel'],
+      3: ['marketSize', 'competitiveAdvantage', 'customerBase'],
+      4: ['growthRate', 'profitMargin', 'burnRate'],
+      5: ['fundingStage', 'runway'],
+      6: ['intellectualProperty']
+    };
+    const fields = requiredByStep[step] || [];
+    fields.forEach((f) => {
+      if (!String(formData[f] || '').trim()) {
+        nextErrors[f] = 'This field is required';
+      }
+    });
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
+  const canNavigateTo = (targetStep) => {
+    // You can always go backwards
+    if (targetStep <= currentStep) return true;
+    // Validate all steps from 1 up to targetStep - 1
+    for (let s = 1; s < targetStep; s += 1) {
+      if (!validateStep(s)) {
+        setCurrentStep(s);
+        return false;
+      }
+    }
+    return true;
+  };
+
   const nextStep = () => {
-    if (currentStep < 8) {
-      setCurrentStep(currentStep + 1);
+    if (!validateStep(currentStep)) return;
+    if (currentStep < 8) setCurrentStep(currentStep + 1);
+  };
+
+  const goToStep = (target) => {
+    if (canNavigateTo(target)) {
+      setCurrentStep(target);
     }
   };
 
@@ -506,6 +607,7 @@ const Calculator = () => {
 
   const calculateValuation = () => {
     // Simplified valuation calculation based on multiple factors
+    if (!validateStep(5)) return; // ensure previous steps valid too
     const revenue = parseFloat(formData.revenue) || 0;
     const employees = parseInt(formData.employees) || 0;
     const growthRate = parseFloat(formData.growthRate) || 0;
@@ -645,8 +747,9 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 value={formData.companyName}
                 onChange={handleInputChange}
                 placeholder="Enter your company name"
-                required
+                className={errors.companyName ? 'error' : ''}
               />
+              {errors.companyName && (<div className="error-text">{errors.companyName}</div>)}
             </InputGroup>
             <InputGroup>
               <label>In which country is your company based? *</label>
@@ -654,7 +757,7 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 name="country"
                 value={formData.country}
                 onChange={handleInputChange}
-                required
+                className={errors.country ? 'error' : ''}
               >
                 <option value="">Select Country</option>
                 {countries.map(country => (
@@ -668,7 +771,7 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 name="industry"
                 value={formData.industry}
                 onChange={handleInputChange}
-                required
+                className={errors.industry ? 'error' : ''}
               >
                 <option value="">Select Industry</option>
                 {industries.map(industry => (
@@ -682,7 +785,7 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 name="businessStage"
                 value={formData.businessStage}
                 onChange={handleInputChange}
-                required
+                className={errors.businessStage ? 'error' : ''}
               >
                 <option value="">Select Stage</option>
                 {businessStages.map(stage => (
@@ -704,8 +807,9 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 value={formData.revenue}
                       onChange={handleInputChange}
                 placeholder="1000000"
-                required
+                className={errors.revenue ? 'error' : ''}
                     />
+                    {errors.revenue && (<div className="error-text">{errors.revenue}</div>)}
                   </InputGroup>
                   <InputGroup>
               <label>Number of Employees *</label>
@@ -715,8 +819,9 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 value={formData.employees}
                       onChange={handleInputChange}
                 placeholder="10"
-                required
+                className={errors.employees ? 'error' : ''}
                     />
+                    {errors.employees && (<div className="error-text">{errors.employees}</div>)}
                   </InputGroup>
                   <InputGroup>
               <label>Revenue Model *</label>
@@ -724,7 +829,7 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 name="revenueModel"
                 value={formData.revenueModel}
                 onChange={handleInputChange}
-                required
+                className={errors.revenueModel ? 'error' : ''}
               >
                 <option value="">Select Revenue Model</option>
                 <option value="Subscription">Subscription</option>
@@ -749,8 +854,9 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 value={formData.marketSize}
                       onChange={handleInputChange}
                 placeholder="1000000000"
-                required
+                className={errors.marketSize ? 'error' : ''}
                     />
+                    {errors.marketSize && (<div className="error-text">{errors.marketSize}</div>)}
                   </InputGroup>
                   <InputGroup>
               <label>Competitive Advantage *</label>
@@ -758,7 +864,7 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 name="competitiveAdvantage"
                 value={formData.competitiveAdvantage}
                 onChange={handleInputChange}
-                required
+                className={errors.competitiveAdvantage ? 'error' : ''}
               >
                 <option value="">Select Level</option>
                 <option value="Weak">Weak</option>
@@ -775,8 +881,9 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 value={formData.customerBase}
                       onChange={handleInputChange}
                 placeholder="1000"
-                required
+                className={errors.customerBase ? 'error' : ''}
                     />
+                    {errors.customerBase && (<div className="error-text">{errors.customerBase}</div>)}
                   </InputGroup>
                 </>
         );
@@ -793,8 +900,9 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                       onChange={handleInputChange}
                 placeholder="50"
                 step="0.1"
-                required
+                className={errors.growthRate ? 'error' : ''}
                     />
+                    {errors.growthRate && (<div className="error-text">{errors.growthRate}</div>)}
                   </InputGroup>
                   <InputGroup>
               <label>Profit Margin (%) *</label>
@@ -805,8 +913,9 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                       onChange={handleInputChange}
                 placeholder="20"
                 step="0.1"
-                required
+                className={errors.profitMargin ? 'error' : ''}
                     />
+                    {errors.profitMargin && (<div className="error-text">{errors.profitMargin}</div>)}
                   </InputGroup>
                   <InputGroup>
               <label>Monthly Burn Rate (USD) *</label>
@@ -816,8 +925,9 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 value={formData.burnRate}
                       onChange={handleInputChange}
                 placeholder="50000"
-                required
+                className={errors.burnRate ? 'error' : ''}
                     />
+                    {errors.burnRate && (<div className="error-text">{errors.burnRate}</div>)}
                   </InputGroup>
           </>
         );
@@ -831,7 +941,7 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 name="fundingStage"
                 value={formData.fundingStage}
                 onChange={handleInputChange}
-                required
+                className={errors.fundingStage ? 'error' : ''}
               >
                 <option value="">Select Funding Stage</option>
                 {fundingStages.map(stage => (
@@ -847,8 +957,9 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 value={formData.runway}
                       onChange={handleInputChange}
                 placeholder="18"
-                required
+                className={errors.runway ? 'error' : ''}
                     />
+                    {errors.runway && (<div className="error-text">{errors.runway}</div>)}
                   </InputGroup>
           </>
         );
@@ -862,7 +973,7 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 name="intellectualProperty"
                 value={formData.intellectualProperty}
                 onChange={handleInputChange}
-                required
+                className={errors.intellectualProperty ? 'error' : ''}
               >
                 <option value="">Select</option>
                 <option value="Yes">Yes</option>
@@ -1096,8 +1207,23 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
           </motion.p>
         </SectionHeader>
 
+        <CalculatorGrid>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <LeftPane>
+              <h2>Business Valuation Calculator: What's Your Business Really Worth?</h2>
+              <p>
+                Get an instant, professional estimate of your business value with our free YD Valuator — built with the same discipline we use in client work. No spam, no strings attached.
+              </p>
+              {/* Stats removed per request */}
+            </LeftPane>
+          </motion.div>
 
-        <motion.div
+          <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
@@ -1109,6 +1235,7 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                   key={step.id}
                   active={currentStep === step.id}
                   completed={currentStep > step.id}
+                  onClick={() => goToStep(step.id)}
                 >
                   {currentStep > step.id ? <FiCheck /> : step.id}
                 </Step>
@@ -1149,6 +1276,7 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
             </StepContent>
             </CalculatorCard>
           </motion.div>
+        </CalculatorGrid>
       </CalculatorSection>
     </CalculatorContainer>
   );

@@ -33,6 +33,17 @@ const HeroSection = styled.section`
   }
 `;
 
+const VideoBackground = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  filter: brightness(0.8);
+`;
+
 const HeroSlide = styled(motion.div)`
   position: absolute;
   top: 0;
@@ -294,6 +305,40 @@ const PromoSection = styled.section`
     padding: ${props => props.theme.spacing[8]} 0;
   }
 `;
+
+const PromoGrid = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 ${props => props.theme.spacing[4]};
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: ${props => props.theme.spacing[10]};
+  align-items: center;
+  
+  @media (max-width: ${props => props.theme.breakpoints.lg}) {
+    grid-template-columns: 1fr;
+    gap: ${props => props.theme.spacing[6]};
+  }
+`;
+
+const PromoLeft = styled.div`
+  h2 {
+    font-family: ${props => props.theme.fonts.display};
+    font-size: 2.4rem;
+    color: ${props => props.theme.colors.primary[800]};
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: ${props => props.theme.spacing[4]};
+  }
+  p {
+    font-size: 1.125rem;
+    color: ${props => props.theme.colors.gray[600]};
+    line-height: 1.7;
+    max-width: 640px;
+  }
+`;
+
+ 
 
 const PromoCard = styled.div`
   background: ${props => props.theme.colors.white};
@@ -581,23 +626,26 @@ const MissionStatement = styled.p`
   }
 `;
 
-const MissionValues = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: ${props => props.theme.spacing[8]};
+const MissionCarousel = styled.div`
+  overflow: hidden;
   margin-top: ${props => props.theme.spacing[10]};
   margin-bottom: ${props => props.theme.spacing[10]};
+`;
+
+const MissionTrack = styled.div`
+  display: flex;
+  gap: ${props => props.theme.spacing[12]};
+  width: max-content;
+  animation: scroll-left 12s linear infinite;
+  will-change: transform;
   
-  @media (max-width: ${props => props.theme.breakpoints.lg}) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: ${props => props.theme.spacing[6]};
+  &:hover {
+    animation-play-state: paused;
   }
-  
-  @media (max-width: ${props => props.theme.breakpoints.md}) {
-    grid-template-columns: 1fr;
-    gap: ${props => props.theme.spacing[5]};
-    margin-top: ${props => props.theme.spacing[8]};
-    margin-bottom: ${props => props.theme.spacing[8]};
+
+  @keyframes scroll-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
 `;
 
@@ -611,6 +659,13 @@ const MissionValue = styled.div`
   transition: all ${props => props.theme.transitions.base};
   position: relative;
   overflow: hidden;
+  min-width: 360px;
+  max-width: 360px;
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    min-width: 280px;
+    max-width: 280px;
+  }
   
   &::before {
     content: '';
@@ -778,8 +833,11 @@ const SectionContent = styled.div`
 `;
 
 const SectionHeader = styled.div`
-  text-align: center;
   margin-bottom: ${props => props.theme.spacing[12]};
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
   
   h2 {
     font-size: ${props => props.theme.fontSizes['4xl']};
@@ -788,17 +846,19 @@ const SectionHeader = styled.div`
   }
   
   p {
-    font-size: ${props => props.theme.fontSizes.xl};
+    font-size: ${props => props.theme.fontSizes.lg};
     color: ${props => props.theme.colors.gray[600]};
-    max-width: 600px;
+    max-width: 760px;
     margin: 0 auto;
+    line-height: 1.6;
   }
 `;
 
 const ServicesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: ${props => props.theme.spacing[8]};
+  align-items: stretch;
   
   @media (max-width: ${props => props.theme.breakpoints.lg}) {
     grid-template-columns: repeat(2, 1fr);
@@ -818,6 +878,9 @@ const ServiceCard = styled.div`
   box-shadow: ${props => props.theme.shadows.sm};
   border: 1px solid ${props => props.theme.colors.gray[200]};
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   
   &:hover {
     transform: translateY(-8px);
@@ -861,6 +924,9 @@ const ServiceImage = styled.div.attrs(props => ({
 
 const ServiceContent = styled.div`
   padding: ${props => props.theme.spacing[6]};
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   
   h3 {
     font-size: ${props => props.theme.fontSizes.xl};
@@ -872,6 +938,7 @@ const ServiceContent = styled.div`
     color: ${props => props.theme.colors.gray[600]};
     line-height: 1.6;
     margin-bottom: ${props => props.theme.spacing[6]};
+    flex: 1;
   }
 `;
 
@@ -883,6 +950,7 @@ const ServiceLink = styled(Link)`
   align-items: center;
   gap: ${props => props.theme.spacing[2]};
   transition: color ${props => props.theme.transitions.fast};
+  margin-top: auto;
   
   &:hover {
     color: ${props => props.theme.colors.primary[700]};
@@ -979,6 +1047,9 @@ const BlogCard = styled.div`
   transition: all ${props => props.theme.transitions.base};
   box-shadow: ${props => props.theme.shadows.sm};
   border: 1px solid ${props => props.theme.colors.gray[200]};
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   
   &:hover {
     transform: translateY(-8px);
@@ -1004,6 +1075,9 @@ const BlogImage = styled.div`
 
 const BlogContent = styled.div`
   padding: ${props => props.theme.spacing[6]};
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 `;
 
 const BlogMeta = styled.div`
@@ -1027,6 +1101,7 @@ const BlogExcerpt = styled.p`
   color: ${props => props.theme.colors.gray[600]};
   line-height: 1.6;
   margin-bottom: ${props => props.theme.spacing[4]};
+  flex: 1;
 `;
 
 const BlogLink = styled(Link)`
@@ -1146,10 +1221,11 @@ const TeamMemberImageSquare = styled.div.attrs(props => ({
   width: 300px;
   height: 300px;
   border-radius: ${props => props.theme.borderRadius.xl};
-  background-size: cover;
+  background-size: contain;
   background-position: center;
+  background-repeat: no-repeat;
   margin: 0 auto;
-  border: 4px solid ${props => props.theme.colors.primary[200]};
+  border: none;
   box-shadow: ${props => props.theme.shadows.lg};
   transition: all ${props => props.theme.transitions.base};
   
@@ -1637,11 +1713,10 @@ const Home = () => {
       
       {/* Hero Section */}
       <HeroSection>
-        <HeroSlide
-          style={{
-            backgroundImage: `url(${heroSlides[0].bgImage})`
-          }}
-        >
+        <HeroSlide>
+          <VideoBackground autoPlay muted loop playsInline crossOrigin="anonymous">
+            <source src="https://api.tworldgcc.com/uploads/Dubai_Edited_52a98e58ec.mp4" type="video/mp4" />
+          </VideoBackground>
           <HeroContent>
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
@@ -1677,7 +1752,22 @@ const Home = () => {
 
       {/* Promotional Section */}
       <PromoSection>
-        <motion.div
+        <PromoGrid>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <PromoLeft>
+              <h2>Business Valuation Calculator: What's Your Business Really Worth?</h2>
+              <p>
+                Get an instant, professional estimate of your business value using our free YD Valuator — accurate and on-brand for boardrooms and investors.
+              </p>
+            </PromoLeft>
+          </motion.div>
+
+          <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -1687,22 +1777,23 @@ const Home = () => {
             <PromoIcon>
               <FiBarChart />
             </PromoIcon>
-            <PromoTitle>Want to join the list?</PromoTitle>
+            <PromoTitle>Business Valuation Calculator</PromoTitle>
             <PromoDescription>
-              Discover your startup's valuation with our AI-powered YD Valuator and claim your spot!
+              Get an instant, professional estimate of your business value using our free calculator — accurate, no strings attached.
             </PromoDescription>
             <PromoBenefits>
-              <PromoBenefit>Free evaluation</PromoBenefit>
-              <PromoBenefit>AI-powered SWOT analysis</PromoBenefit>
-              <PromoBenefit>Instant results</PromoBenefit>
+              <PromoBenefit>Industry‑grade methodology</PromoBenefit>
+              <PromoBenefit>Fast, audit‑ready output</PromoBenefit>
+              <PromoBenefit>100% free to try</PromoBenefit>
             </PromoBenefits>
-            <PromoButton to="/calculator">
+            <PromoButton to="/calculator" aria-label="Access Free Calculator">
               <FiBarChart />
-              Start Now - Free!
+              Access Free Calculator
               <FiArrowRight />
             </PromoButton>
           </PromoCard>
-        </motion.div>
+          </motion.div>
+        </PromoGrid>
       </PromoSection>
 
       {/* Services Section */}
@@ -1723,7 +1814,7 @@ const Home = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              We deliver Fractional CFO, valuation, M&A, and corporate finance that turns analysis into action—built to hold up in boardrooms and negotiations. All work is IVSC-aligned and audit-ready, with clear assumptions, sensitivities, and executive summaries.
+              Valuation, M&A, and Fractional CFO support that turns analysis into action—IVSC‑aligned and boardroom‑ready.
             </motion.p>
           </SectionHeader>
 
@@ -1744,7 +1835,11 @@ const Home = () => {
                 </motion.div>
               ))
             ) : (
-              featuredServices.slice(0, 3).map((service, index) => {
+              (() => {
+                const base = featuredServices.slice(0, 3);
+                const cfo = featuredServices.find(s => s.slug === 'fractional-cfo');
+                const list = cfo ? [...base, cfo] : featuredServices.slice(0, 4);
+                return list.map((service, index) => {
                 const IconComponent = iconMap[service.icon] || FiTrendingUp;
                 return (
                   <motion.div
@@ -1768,7 +1863,8 @@ const Home = () => {
                     </ServiceCard>
                   </motion.div>
                 );
-              })
+              });
+            })()
             )}
           </ServicesGrid>
           
@@ -1873,7 +1969,8 @@ const Home = () => {
               <MissionStatement>
                 We provide specialized financial expertise across the entire ecosystem, from startups to established enterprises.
               </MissionStatement>
-              <MissionValues>
+              <MissionCarousel>
+                <MissionTrack>
                 <MissionValue>
                   <h3>For Founders & Entrepreneurs</h3>
                   <p>From "what's my company worth?" to "how do we close this round?"—we turn numbers into a valuation you can defend and a story investors buy.</p>
@@ -1898,7 +1995,33 @@ const Home = () => {
                   <h3>For Lenders & Credit Teams</h3>
                   <p>Reliable covenant math and borrower models—stress tests, cash-flow forecasts, and collateral valuations that reduce surprises.</p>
                 </MissionValue>
-              </MissionValues>
+                {/* duplicate for seamless infinite scroll */}
+                <MissionValue>
+                  <h3>For Founders & Entrepreneurs</h3>
+                  <p>From "what's my company worth?" to "how do we close this round?"—we turn numbers into a valuation you can defend and a story investors buy.</p>
+                </MissionValue>
+                <MissionValue>
+                  <h3>For CFOs & Finance Leaders</h3>
+                  <p>Board-ready models, KPI packs, and fair-value updates—plus a fractional lift when you need senior capacity without the full-time cost for all financial needs for a company.</p>
+                </MissionValue>
+                <MissionValue>
+                  <h3>For Investors & Family Offices</h3>
+                  <p>Buy, sell, or hold with conviction—IVSC-aligned valuations, red-flag diligence, SPA/PPA modelling, and post-deal integration support.</p>
+                </MissionValue>
+                <MissionValue>
+                  <h3>For SMEs & Boards</h3>
+                  <p>Clear options, not noise—feasibility papers, scenario analysis, working-capital reviews, and decision memos that move the agenda.</p>
+                </MissionValue>
+                <MissionValue>
+                  <h3>For Private Equity and VC Funds</h3>
+                  <p>Fast, defensible workstreams—screening, unit economics, QoE-style reviews, and complex security pricing that stands up in IC.</p>
+                </MissionValue>
+                <MissionValue>
+                  <h3>For Lenders & Credit Teams</h3>
+                  <p>Reliable covenant math and borrower models—stress tests, cash-flow forecasts, and collateral valuations that reduce surprises.</p>
+                </MissionValue>
+                </MissionTrack>
+              </MissionCarousel>
               
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -2015,18 +2138,32 @@ const Home = () => {
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
               >
-                Meet Our Financial Expert
+                Meet Our Founder
               </motion.h2>
-              <motion.p
+              <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
                 viewport={{ once: true }}
               >
-                Yashaswi Das — Founder & Principal
-                <br /><br />
-                What she delivers: Defensible valuations (409A, complex, IP/PPA) · Decision-ready models (3-statement, scenarios, Monte-Carlo) · Hands-on M&A (red-flag diligence, SPA/PPA, integration). – (More information in about page)
-              </motion.p>
+                <p style={{ marginBottom: '0.75rem' }}>Yashaswi Das — Founder & Principal</p>
+                <ul style={{ paddingLeft: '1rem', margin: 0, color: '#4b5563', lineHeight: 1.6 }}>
+                  <li>Defensible valuations: 409A, complex securities, IP/PPA</li>
+                  <li>Decision‑ready models: three‑statement, scenarios, Monte‑Carlo</li>
+                  <li>Hands‑on M&A: red‑flag diligence, SPA/PPA, integration</li>
+                </ul>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.35 }}
+                viewport={{ once: true }}
+                style={{ marginTop: '1rem' }}
+              >
+                <PrimaryButton to="/about">
+                  Read More <FiArrowRight />
+                </PrimaryButton>
+              </motion.div>
             </TeamShowcaseContent>
              <motion.div
                initial={{ opacity: 0, x: 30 }}
@@ -2034,7 +2171,7 @@ const Home = () => {
                transition={{ duration: 0.6 }}
                viewport={{ once: true }}
              >
-               <TeamMemberImageSquare image="/images/team/Yashaswi-Das.jpg" />
+               <TeamMemberImageSquare image="/images/team/yashaswi_das.png" />
              </motion.div>
           </TeamShowcaseGrid>
         </SectionContent>
