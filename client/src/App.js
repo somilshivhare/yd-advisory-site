@@ -23,6 +23,12 @@ import Blog from './pages/Blog';
 import BlogDetail from './pages/BlogDetail';
 import BlogPost from './pages/BlogPost';
 import Calculator from './pages/Calculator';
+import ValuationCalculator from './pages/ValuationCalculator';
+import Transparency from './pages/Transparency';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import CookiePolicy from './pages/CookiePolicy';
+import Sitemap from './pages/Sitemap';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -46,6 +52,12 @@ function App() {
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogDetail />} />
                 <Route path="/calculator" element={<Calculator />} />
+                <Route path="/valuation-calculator" element={<ValuationCalculator />} />
+                <Route path="/transparency" element={<Transparency />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<TermsOfService />} />
+                <Route path="/cookies" element={<CookiePolicy />} />
+                <Route path="/sitemap" element={<Sitemap />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

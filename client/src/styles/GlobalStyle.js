@@ -13,28 +13,40 @@ const GlobalStyle = createGlobalStyle`
   html {
     font-size: 16px;
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
   }
 
   body {
     font-family: ${theme.fonts.primary};
     font-size: ${theme.fontSizes.base};
     font-weight: ${theme.fontWeights.normal};
-    line-height: 1.6;
+    line-height: 1.7;
     color: ${theme.colors.gray[800]};
     background-color: ${theme.colors.white};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     width: 100%;
+    max-width: 100vw;
+    letter-spacing: 0.01em;
+    position: relative;
+    
+    @media (max-width: ${theme.breakpoints.sm}) {
+      font-size: ${theme.fontSizes.sm};
+      line-height: 1.6;
+    }
   }
 
   /* Typography */
   h1, h2, h3, h4, h5, h6 {
-    font-family: ${theme.fonts.secondary};
+    font-family: ${theme.fonts.display};
     font-weight: ${theme.fontWeights.bold};
     line-height: 1.2;
     margin-bottom: ${theme.spacing[4]};
     color: ${theme.colors.primary[800]};
+    letter-spacing: -0.025em;
   }
 
   h1 {
@@ -45,7 +57,8 @@ const GlobalStyle = createGlobalStyle`
       font-size: ${theme.fontSizes['4xl']};
     }
     @media (max-width: ${theme.breakpoints.sm}) {
-      font-size: ${theme.fontSizes['3xl']};
+      font-size: ${theme.fontSizes['2xl']};
+      line-height: 1.3;
     }
   }
 
@@ -57,7 +70,8 @@ const GlobalStyle = createGlobalStyle`
       font-size: ${theme.fontSizes['3xl']};
     }
     @media (max-width: ${theme.breakpoints.sm}) {
-      font-size: ${theme.fontSizes['2xl']};
+      font-size: ${theme.fontSizes.xl};
+      line-height: 1.3;
     }
   }
 
@@ -69,7 +83,8 @@ const GlobalStyle = createGlobalStyle`
       font-size: ${theme.fontSizes['2xl']};
     }
     @media (max-width: ${theme.breakpoints.sm}) {
-      font-size: ${theme.fontSizes.xl};
+      font-size: ${theme.fontSizes.lg};
+      line-height: 1.4;
     }
   }
 
@@ -140,10 +155,16 @@ const GlobalStyle = createGlobalStyle`
     border: none;
     border-radius: ${theme.borderRadius.md};
     transition: all ${theme.transitions.fast};
+    min-height: 44px; /* Better touch target for mobile */
     
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
+    }
+    
+    @media (max-width: ${theme.breakpoints.sm}) {
+      min-height: 48px;
+      font-size: ${theme.fontSizes.base};
     }
   }
 
@@ -152,10 +173,59 @@ const GlobalStyle = createGlobalStyle`
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 ${theme.spacing[4]};
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
     
     @media (max-width: ${theme.breakpoints.sm}) {
       padding: 0 ${theme.spacing[3]};
     }
+  }
+
+  /* Prevent horizontal overflow */
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Fix for zoom issues */
+  .App {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Prevent content from being cut off during zoom */
+  @media screen and (max-width: 480px) {
+    html {
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+    
+    body {
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+  }
+
+  /* Fix for iOS Safari zoom issues */
+  @supports (-webkit-touch-callout: none) {
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+    
+    body {
+      -webkit-text-size-adjust: 100%;
+    }
+  }
+
+  /* Ensure all sections handle zoom properly */
+  section {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
 
   .text-center {
@@ -180,6 +250,33 @@ const GlobalStyle = createGlobalStyle`
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+  }
+
+  /* Mobile-specific utility classes */
+  .mobile-hidden {
+    @media (max-width: ${theme.breakpoints.sm}) {
+      display: none !important;
+    }
+  }
+
+  .mobile-only {
+    display: none;
+    @media (max-width: ${theme.breakpoints.sm}) {
+      display: block !important;
+    }
+  }
+
+  .mobile-full-width {
+    @media (max-width: ${theme.breakpoints.sm}) {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+  }
+
+  .mobile-center {
+    @media (max-width: ${theme.breakpoints.sm}) {
+      text-align: center !important;
+    }
   }
 
   /* Animation Classes */

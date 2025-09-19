@@ -15,7 +15,7 @@ export const organizationSchema = {
   },
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Emirates Tower, Trade Centre - DIFC",
+    "streetAddress": "Level 41, Emirates Tower – DIFC, Near Trade Center",
     "addressLocality": "Dubai",
     "addressRegion": "Dubai",
     "postalCode": "00000",
@@ -23,9 +23,9 @@ export const organizationSchema = {
   },
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+91-70576-73562",
+    "telephone": "+971-528477349",
     "contactType": "customer service",
-    "email": "yashaswi.das@ydadvisory.ae",
+    "email": "Yashaswi.das@ydadvisory.ae",
     "availableLanguage": ["English", "Hindi", "Arabic"]
   },
   "sameAs": [
@@ -207,11 +207,11 @@ export const localBusinessSchema = {
   "image": "https://ydadvisory.ae/images/logo/logo.png",
   "description": "Financial advisory and consulting services in Dubai, UAE",
   "url": "https://ydadvisory.ae",
-  "telephone": "+91-70576-73562",
-  "email": "yashaswi.das@ydadvisory.ae",
+  "telephone": "+971-528477349",
+  "email": "Yashaswi.das@ydadvisory.ae",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Emirates Tower, Trade Centre - DIFC",
+    "streetAddress": "Level 41, Emirates Tower – DIFC, Near Trade Center",
     "addressLocality": "Dubai",
     "addressRegion": "Dubai",
     "postalCode": "00000",

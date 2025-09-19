@@ -20,6 +20,7 @@ import {
   FiPrinter
 } from 'react-icons/fi';
 import SEO from '../components/SEO';
+import ValuationRequestForm from '../components/ValuationRequestForm';
 
 const CalculatorContainer = styled.div`
   padding-top: 120px;
@@ -66,54 +67,6 @@ const SectionHeader = styled.div`
   }
 `;
 
-const StatsSection = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: ${props => props.theme.spacing[8]};
-  margin-bottom: ${props => props.theme.spacing[16]};
-  
-  @media (max-width: ${props => props.theme.breakpoints.lg}) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  @media (max-width: ${props => props.theme.breakpoints.sm}) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const StatCard = styled.div`
-  background: ${props => props.theme.colors.white};
-  border-radius: 16px;
-  padding: ${props => props.theme.spacing[8]};
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid ${props => props.theme.colors.gray[200]};
-  text-align: center;
-  transition: transform 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-5px);
-  }
-  
-  .number {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: ${props => props.theme.colors.primary[700]};
-    margin-bottom: ${props => props.theme.spacing[2]};
-  }
-  
-  .label {
-    font-size: 1.1rem;
-    color: ${props => props.theme.colors.gray[600]};
-    font-weight: 600;
-  }
-  
-  .description {
-    font-size: 0.9rem;
-    color: ${props => props.theme.colors.gray[500]};
-    margin-top: ${props => props.theme.spacing[2]};
-    line-height: 1.4;
-  }
-`;
 
 const CalculatorCard = styled.div`
   background: ${props => props.theme.colors.white};
@@ -670,7 +623,7 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
     `;
 
     // Create mailto link
-    const mailtoLink = `mailto:yashaswi.das@ydadvisory.ae?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    const mailtoLink = `mailto:Yashaswi.das@ydadvisory.ae?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
     
     // Open email client
     window.open(mailtoLink);
@@ -1022,80 +975,67 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
                 Our expert team will contact you within 24 hours to discuss your valuation in detail and provide personalized recommendations.
               </ContactDescription>
               
-              <ContactForm>
-                <InputGroup>
-                  <label>Your Name *</label>
-                  <input
-                    type="text"
-                    name="contactName"
-                    value={formData.contactName || ''}
-                    onChange={handleInputChange}
-                    placeholder="Enter your full name"
-                    required
-                  />
-                </InputGroup>
-                <InputGroup>
-                  <label>Email Address *</label>
-                  <input
-                    type="email"
-                    name="contactEmail"
-                    value={formData.contactEmail || ''}
-                    onChange={handleInputChange}
-                    placeholder="your.email@company.com"
-                    required
-                  />
-                </InputGroup>
-                <InputGroup>
-                  <label>Phone Number</label>
-                  <input
-                    type="tel"
-                    name="contactPhone"
-                    value={formData.contactPhone || ''}
-                    onChange={handleInputChange}
-                    placeholder="+91 XXXXX XXXXX"
-                  />
-                </InputGroup>
-                <InputGroup>
-                  <label>Additional Notes</label>
-                  <textarea
-                    name="contactNotes"
-                    value={formData.contactNotes || ''}
-                    onChange={handleInputChange}
-                    placeholder="Tell us more about your business or specific questions..."
-                    rows="3"
-                  />
-                </InputGroup>
-              </ContactForm>
+              <ValuationRequestForm 
+                showTitle={false}
+                onSubmit={async (data) => {
+                  // Handle valuation form submission with calculator data
+                  const emailSubject = `Valuation Request - ${formData.companyName}`;
+                  const emailBody = `
+Valuation Request Details:
+
+Company: ${formData.companyName}
+Country: ${formData.country}
+Industry: ${formData.industry}
+Business Stage: ${formData.businessStage}
+
+Contact Information:
+Name: ${data.firstName} ${data.lastName}
+Email: ${data.email}
+Phone: ${data.phone}
+Company: ${data.companyName || 'Not provided'}
+
+Valuation Results:
+Estimated Value: ${formatCurrency(valuation?.companyValue || 0)}
+Revenue Multiple: ${valuation?.revenueMultiple}x
+Market Factor: +${valuation?.marketFactor}%
+Employee Value: ${formatCurrency(valuation?.employeeValue || 0)}
+IP Bonus: ${formatCurrency(valuation?.ipBonus || 0)}
+Competitive Bonus: ${formatCurrency(valuation?.competitiveBonus || 0)}
+Risk Factor: ${valuation?.riskFactor}%
+
+Additional Notes:
+${data.message || 'No additional notes provided'}
+
+---
+This valuation was generated using the YD Valuator tool.
+Our team will contact you within 24 hours to discuss your valuation in detail.
+                  `;
+
+                  const mailtoLink = `mailto:Yashaswi.das@ydadvisory.ae?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+                  window.open(mailtoLink);
+                  
+                  alert('Email client opened! Please send the email to complete your valuation request. Our team will contact you within 24 hours.');
+                }}
+              />
 
               <ContactInfo>
                 <ContactItem>
                   <FiMail />
                   <div>
                     <strong>Email Us</strong>
-                    <span>yashaswi.das@ydadvisory.ae</span>
+                    <span>Yashaswi.das@ydadvisory.ae</span>
                       </div>
                 </ContactItem>
                 <ContactItem>
                   <FiPhone />
                   <div>
                     <strong>Call Us</strong>
-                    <span>+91 70576 73562</span>
-                  </div>
-                </ContactItem>
-                <ContactItem>
-                  <FiClock />
-                  <div>
-                    <strong>Response Time</strong>
-                    <span>Within 24 hours</span>
+                    <span>+971-528477349</span>
                   </div>
                 </ContactItem>
               </ContactInfo>
 
               <ActionButtons>
-                <Button primary onClick={handleSubmitContact}>
-                  <FiMail />
-                  Send Valuation Request
-                </Button>
                 <Button onClick={() => window.print()}>
                   <FiPrinter />
                   Print Results
@@ -1113,15 +1053,15 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
   return (
     <CalculatorContainer>
       <SEO
-        title="YD Valuator - Business Valuation Calculator | YD Advisory Dubai"
-        description="Professional business valuation calculator by YD Advisory. Get instant business valuations with our expert-powered YD Valuator tool. Trusted by 50+ clients across 9+ geographies."
-        keywords="business valuation calculator Dubai, company valuation UAE, YD Valuator, business worth calculator, startup valuation Dubai, SME valuation UAE, investment valuation calculator"
+        title="YD Valuator - Business Valuation Tool | YD Advisory Dubai"
+        description="Professional business valuation tool by YD Advisory. Get instant business valuations with our expert-powered YD Valuator. Trusted by 50+ clients across 9+ geographies."
+        keywords="business valuation tool Dubai, company valuation UAE, YD Valuator, business worth calculator, startup valuation Dubai, SME valuation UAE, investment valuation tool"
         url="https://ydadvisory.ae/calculator"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "WebApplication",
           "name": "YD Valuator",
-          "description": "Professional business valuation calculator",
+          "description": "Professional business valuation tool",
           "url": "https://ydadvisory.ae/calculator",
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "Web Browser",
@@ -1152,45 +1092,10 @@ Our team will contact you within 24 hours to discuss your valuation in detail.
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Professional business valuation calculator powered by YD Advisory's expertise
+            Professional business valuation tool powered by YD Advisory's expertise
           </motion.p>
         </SectionHeader>
 
-        <StatsSection>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <StatCard>
-              <div className="number">50+</div>
-              <div className="label">Clients</div>
-              <div className="description">Startups, SMEs, and investors served</div>
-            </StatCard>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <StatCard>
-              <div className="number">$100M+</div>
-              <div className="label">Capital Supported</div>
-              <div className="description">Across equity, debt, and M&A transactions</div>
-            </StatCard>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <StatCard>
-              <div className="number">9+</div>
-              <div className="label">Geographies</div>
-              <div className="description">UAE, India, Singapore, Saudi Arabia, and more</div>
-            </StatCard>
-          </motion.div>
-        </StatsSection>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}

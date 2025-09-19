@@ -63,9 +63,10 @@ export const theme = {
   
   // Typography
   fonts: {
-    primary: '"Inter", "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif',
-    secondary: '"Playfair Display", "Times New Roman", serif',
-    mono: '"Fira Code", "Monaco", "Consolas", monospace',
+    primary: '"Poppins", "Inter", "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif',
+    secondary: '"Merriweather", "Playfair Display", "Times New Roman", serif',
+    mono: '"JetBrains Mono", "Fira Code", "Monaco", "Consolas", monospace',
+    display: '"Montserrat", "Poppins", "Inter", sans-serif',
   },
   
   fontSizes: {

@@ -109,8 +109,8 @@ router.post('/submit', [
             <p>Our team of financial experts will review your request and provide you with personalized guidance.</p>
             <hr style="margin: 30px 0;">
             <p><strong>YD Advisory Team</strong><br>
-            📞 +91 70576 73562<br>
-            📧 info@ydadvisory.com<br>
+            📞 +971-528477349<br>
+            📧 Yashaswi.das@ydadvisory.ae<br>
             🌐 www.ydadvisory.com</p>
           </div>
         `

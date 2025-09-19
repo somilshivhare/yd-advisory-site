@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiCheckCircle, FiTrendingUp, FiShield, FiUsers, FiAward, FiTarget, FiDollarSign, FiPieChart, FiBriefcase, FiChevronLeft, FiChevronRight, FiPlay, FiPause, FiMail, FiPhone, FiMapPin, FiClock, FiBarChart, FiDownload } from 'react-icons/fi';
+import { FiArrowRight, FiCheckCircle, FiTrendingUp, FiShield, FiUsers, FiAward, FiTarget, FiDollarSign, FiPieChart, FiBriefcase, FiMail, FiPhone, FiMapPin, FiClock, FiBarChart, FiDownload } from 'react-icons/fi';
 import { servicesService } from '../services/api';
 import SEO from '../components/SEO';
 import { organizationSchema, websiteSchema, localBusinessSchema } from '../utils/structuredData';
 
 const HomeContainer = styled.div`
   padding-top: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
 `;
 
 const HeroSection = styled.section`
@@ -17,13 +21,19 @@ const HeroSection = styled.section`
   min-height: 100vh;
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100vw;
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    min-height: 100vh;
+    padding: ${props => props.theme.spacing[4]} 0;
+    align-items: flex-start;
+    padding-top: 120px; /* Account for fixed header */
+  }
 `;
 
-const HeroSlide = styled(motion.div).attrs(props => ({
-  style: {
-    backgroundImage: `linear-gradient(135deg, rgba(20, 184, 166, 0.3) 0%, rgba(15, 118, 110, 0.4) 100%), url(${props.bgImage})`
-  }
-}))`
+const HeroSlide = styled(motion.div)`
   position: absolute;
   top: 0;
   left: 0;
@@ -31,188 +41,157 @@ const HeroSlide = styled(motion.div).attrs(props => ({
   bottom: 0;
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   color: ${props => props.theme.colors.white};
-  padding: ${props => props.theme.spacing[20]} 0;
-  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.4) 0%, rgba(15, 118, 110, 0.5) 100%);
+    z-index: 1;
+  }
 `;
 
 const HeroContent = styled.div`
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 ${props => props.theme.spacing[4]};
+  padding: ${props => props.theme.spacing[12]} ${props => props.theme.spacing[4]};
   position: relative;
   z-index: 2;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-align: center;
   width: 100%;
+  max-width: 100vw;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    padding: ${props => props.theme.spacing[6]} ${props => props.theme.spacing[3]};
+    min-height: calc(100vh - 120px);
+    justify-content: flex-start;
+    padding-top: ${props => props.theme.spacing[8]};
+    max-width: 100vw;
+  }
   
   h1 {
-    font-size: 4rem;
+    font-family: ${props => props.theme.fonts.display};
+    font-size: 2.5rem;
     margin-bottom: ${props => props.theme.spacing[6]};
     color: ${props => props.theme.colors.white};
-    font-weight: 800;
-    line-height: 1.1;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+    line-height: 1.2;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
     word-wrap: break-word;
     overflow-wrap: break-word;
+    max-width: 100%;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    
+    @media (max-width: ${props => props.theme.breakpoints.lg}) {
+      font-size: 2.2rem;
+    }
     
     @media (max-width: ${props => props.theme.breakpoints.md}) {
-      font-size: 3rem;
+      font-size: 2rem;
     }
     
     @media (max-width: ${props => props.theme.breakpoints.sm}) {
-      font-size: 2rem;
+      font-size: 1.6rem;
       margin-bottom: ${props => props.theme.spacing[4]};
+      padding: 0 ${props => props.theme.spacing[1]};
+      line-height: 1.3;
+      font-weight: 700;
+      margin-top: ${props => props.theme.spacing[4]};
     }
   }
   
   p {
-    font-size: 1.5rem;
+    font-family: ${props => props.theme.fonts.primary};
+    font-size: 1.1rem;
     color: ${props => props.theme.colors.white};
-    line-height: 1.6;
+    line-height: 1.5;
     margin-bottom: ${props => props.theme.spacing[8]};
     max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    font-weight: 500;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    font-weight: 400;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    letter-spacing: 0.01em;
+    opacity: 0.95;
     
     @media (max-width: ${props => props.theme.breakpoints.md}) {
-      font-size: 1.25rem;
+      font-size: 1rem;
     }
     
     @media (max-width: ${props => props.theme.breakpoints.sm}) {
-      font-size: 1rem;
-      margin-bottom: ${props => props.theme.spacing[6]};
-      padding: 0 ${props => props.theme.spacing[2]};
+      font-size: 0.9rem;
+      margin-bottom: ${props => props.theme.spacing[5]};
+      padding: 0 ${props => props.theme.spacing[1]};
+      line-height: 1.4;
+      font-weight: 400;
     }
   }
 `;
 
-const HeroControls = styled.div`
-  position: absolute;
-  bottom: ${props => props.theme.spacing[8]};
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: ${props => props.theme.spacing[4]};
-  z-index: 3;
-`;
-
-const HeroDots = styled.div`
-  display: flex;
-  gap: ${props => props.theme.spacing[2]};
-`;
-
-const HeroDot = styled.button`
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2px solid ${props => props.theme.colors.white};
-  background: ${props => props.active ? props.theme.colors.white : 'transparent'};
-  cursor: pointer;
-  transition: all ${props => props.theme.transitions.fast};
-  
-  &:hover {
-    background: ${props => props.theme.colors.white};
-    opacity: 0.7;
-  }
-`;
-
-const HeroNavButton = styled.button`
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid ${props => props.theme.colors.white};
-  color: ${props => props.theme.colors.white};
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all ${props => props.theme.transitions.fast};
-  backdrop-filter: blur(10px);
-  
-  &:hover {
-    background: ${props => props.theme.colors.white};
-    color: ${props => props.theme.colors.primary[600]};
-    transform: scale(1.1);
-  }
-  
-  @media (max-width: ${props => props.theme.breakpoints.sm}) {
-    width: 40px;
-    height: 40px;
-  }
-`;
-
-const PlayPauseButton = styled.button`
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid ${props => props.theme.colors.white};
-  color: ${props => props.theme.colors.white};
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all ${props => props.theme.transitions.fast};
-  backdrop-filter: blur(10px);
-  
-  &:hover {
-    background: ${props => props.theme.colors.white};
-    color: ${props => props.theme.colors.primary[600]};
-    transform: scale(1.1);
-  }
-  
-  @media (max-width: ${props => props.theme.breakpoints.sm}) {
-    width: 40px;
-    height: 40px;
-  }
-`;
 
 const CtaButtons = styled.div`
   display: flex;
-  gap: ${props => props.theme.spacing[4]};
+  gap: ${props => props.theme.spacing[6]};
   justify-content: center;
   flex-wrap: wrap;
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
+  box-sizing: border-box;
   
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
     flex-direction: column;
     align-items: center;
     gap: ${props => props.theme.spacing[3]};
-    padding: 0 ${props => props.theme.spacing[4]};
+    padding: 0 ${props => props.theme.spacing[1]};
+    width: 100%;
+    max-width: 100%;
+    margin-top: ${props => props.theme.spacing[4]};
   }
 `;
 
 const PrimaryButton = styled(Link)`
+  font-family: ${props => props.theme.fonts.primary};
   background: linear-gradient(135deg, ${props => props.theme.colors.primary[600]}, ${props => props.theme.colors.primary[700]});
   color: ${props => props.theme.colors.white};
-  padding: 18px 36px;
+  padding: 16px 32px;
   border-radius: 12px;
   text-decoration: none;
-  font-weight: 700;
-  font-size: 1.125rem;
+  font-weight: 600;
+  font-size: 1rem;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   transition: all 0.3s ease;
-  box-shadow: 0 15px 35px rgba(20, 184, 166, 0.4);
+  box-shadow: 0 8px 20px rgba(20, 184, 166, 0.4);
   border: 2px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
   text-align: center;
   min-width: 220px;
   position: relative;
   overflow: hidden;
+  letter-spacing: 0.01em;
+  backdrop-filter: blur(10px);
   
   &::before {
     content: '';
@@ -226,10 +205,10 @@ const PrimaryButton = styled(Link)`
   }
   
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 25px 50px rgba(20, 184, 166, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(20, 184, 166, 0.5);
     background: linear-gradient(135deg, ${props => props.theme.colors.primary[700]}, ${props => props.theme.colors.primary[800]});
-    scale: 1.05;
+    scale: 1.02;
     border-color: rgba(255, 255, 255, 0.3);
     
     &::before {
@@ -238,58 +217,505 @@ const PrimaryButton = styled(Link)`
   }
   
   &:active {
-    transform: translateY(-2px);
-    scale: 1.02;
+    transform: translateY(-1px);
+    scale: 1.01;
   }
   
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
-    min-width: 280px;
+    min-width: 100%;
     max-width: 100%;
-    padding: 16px 32px;
-    font-size: 1rem;
+    padding: 14px 18px;
+    font-size: 0.9rem;
     width: 100%;
+    border-radius: 10px;
+    font-weight: 600;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
 const SecondaryButton = styled(Link)`
-  background: transparent;
+  font-family: ${props => props.theme.fonts.primary};
+  background: rgba(255, 255, 255, 0.1);
   color: ${props => props.theme.colors.white};
   padding: 16px 32px;
-  border: 2px solid ${props => props.theme.colors.white};
-  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
   text-decoration: none;
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 1rem;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   transition: all 0.3s ease;
   cursor: pointer;
   text-align: center;
-  min-width: 200px;
-  backdrop-filter: blur(10px);
+  min-width: 220px;
+  backdrop-filter: blur(15px);
+  letter-spacing: 0.01em;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   
   &:hover {
     background: ${props => props.theme.colors.white};
     color: ${props => props.theme.colors.primary[700]};
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
     border-color: ${props => props.theme.colors.white};
+    scale: 1.02;
   }
   
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
-    min-width: 280px;
+    min-width: 100%;
     max-width: 100%;
-    padding: 14px 28px;
-    font-size: 1rem;
+    padding: 14px 18px;
+    font-size: 0.9rem;
     width: 100%;
+    border-radius: 10px;
+    font-weight: 600;
+    border-width: 2px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
-const StatsSection = styled.section`
-  background: ${props => props.theme.colors.white};
+const PromoSection = styled.section`
+  background: ${props => props.theme.colors.gray[50]};
   padding: ${props => props.theme.spacing[16]} 0;
-  border-bottom: 1px solid ${props => props.theme.colors.gray[200]};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: auto;
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    padding: ${props => props.theme.spacing[8]} 0;
+  }
+`;
+
+const PromoCard = styled.div`
+  background: ${props => props.theme.colors.white};
+  border: 2px solid ${props => props.theme.colors.primary[200]};
+  border-radius: ${props => props.theme.borderRadius.xl};
+  padding: ${props => props.theme.spacing[8]} ${props => props.theme.spacing[6]};
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 ${props => props.theme.spacing[4]};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, ${props => props.theme.colors.primary[400]}, ${props => props.theme.colors.primary[600]});
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    padding: ${props => props.theme.spacing[5]} ${props => props.theme.spacing[3]};
+    margin: 0 ${props => props.theme.spacing[1]};
+    max-width: calc(100% - 16px);
+    border-radius: ${props => props.theme.borderRadius.lg};
+  }
+`;
+
+const PromoIcon = styled.div`
+  width: 70px;
+  height: 70px;
+  background: ${props => props.theme.colors.primary[50]};
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto ${props => props.theme.spacing[4]};
+  border: 2px solid ${props => props.theme.colors.primary[200]};
+  
+  svg {
+    width: 35px;
+    height: 35px;
+    color: ${props => props.theme.colors.primary[600]};
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto ${props => props.theme.spacing[2]};
+    
+    svg {
+      width: 25px;
+      height: 25px;
+    }
+  }
+`;
+
+const PromoTitle = styled.h2`
+  font-size: 2.2rem;
+  color: ${props => props.theme.colors.primary[800]};
+  margin-bottom: ${props => props.theme.spacing[4]};
+  font-weight: 700;
+  font-family: serif;
+  line-height: 1.2;
+  
+  @media (max-width: ${props => props.theme.breakpoints.md}) {
+    font-size: 2rem;
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    font-size: 1.3rem;
+    margin-bottom: ${props => props.theme.spacing[2]};
+    line-height: 1.3;
+  }
+`;
+
+const PromoDescription = styled.p`
+  font-size: 1rem;
+  color: ${props => props.theme.colors.gray[600]};
+  margin-bottom: ${props => props.theme.spacing[5]};
+  line-height: 1.5;
+  font-weight: 400;
+  max-width: 350px;
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    font-size: 0.85rem;
+    margin-bottom: ${props => props.theme.spacing[3]};
+    max-width: 100%;
+    line-height: 1.4;
+  }
+`;
+
+const PromoBenefits = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0 0 ${props => props.theme.spacing[6]} 0;
+  text-align: left;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    margin: 0 0 ${props => props.theme.spacing[4]} 0;
+    max-width: 100%;
+  }
+`;
+
+const PromoBenefit = styled.li`
+  display: flex;
+  align-items: center;
+  margin-bottom: ${props => props.theme.spacing[3]};
+  color: ${props => props.theme.colors.gray[700]};
+  font-size: 1rem;
+  font-weight: 500;
+  
+  &::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: ${props => props.theme.colors.primary[500]};
+    border-radius: 50%;
+    margin-right: ${props => props.theme.spacing[3]};
+    flex-shrink: 0;
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    font-size: 0.8rem;
+    margin-bottom: ${props => props.theme.spacing[1]};
+    
+    &::before {
+      width: 6px;
+      height: 6px;
+      margin-right: ${props => props.theme.spacing[2]};
+    }
+  }
+`;
+
+const PromoButton = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing[2]};
+  background: ${props => props.theme.colors.primary[600]};
+  color: ${props => props.theme.colors.white};
+  padding: ${props => props.theme.spacing[3]} ${props => props.theme.spacing[6]};
+  border-radius: ${props => props.theme.borderRadius.lg};
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all ${props => props.theme.transitions.fast};
+  box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
+  border: 2px solid ${props => props.theme.colors.primary[600]};
+  width: 100%;
+  justify-content: center;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(20, 184, 166, 0.4);
+    background: ${props => props.theme.colors.primary[700]};
+    border-color: ${props => props.theme.colors.primary[700]};
+  }
+  
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    padding: ${props => props.theme.spacing[2]} ${props => props.theme.spacing[3]};
+    font-size: 0.85rem;
+    min-height: 44px;
+    
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+`;
+
+// Mission Section
+const MissionSection = styled.section`
+  padding: ${props => props.theme.spacing[16]} 0;
+  background: ${props => props.theme.colors.white};
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, ${props => props.theme.colors.primary[50]} 0%, ${props => props.theme.colors.gray[50]} 100%);
+    z-index: 0;
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    padding: ${props => props.theme.spacing[12]} 0;
+  }
+`;
+
+const MissionContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 ${props => props.theme.spacing[4]};
+  position: relative;
+  z-index: 1;
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    padding: 0 ${props => props.theme.spacing[3]};
+  }
+`;
+
+const MissionContent = styled.div`
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+`;
+
+const MissionIcon = styled.div`
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, ${props => props.theme.colors.primary[500]}, ${props => props.theme.colors.primary[600]});
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto ${props => props.theme.spacing[6]};
+  color: ${props => props.theme.colors.white};
+  font-size: ${props => props.theme.fontSizes['3xl']};
+  box-shadow: 0 8px 25px rgba(20, 184, 166, 0.3);
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    width: 60px;
+    height: 60px;
+    font-size: ${props => props.theme.fontSizes['2xl']};
+    margin: 0 auto ${props => props.theme.spacing[4]};
+  }
+`;
+
+const MissionTitle = styled.h2`
+  font-size: ${props => props.theme.fontSizes['4xl']};
+  color: ${props => props.theme.colors.primary[800]};
+  margin-bottom: ${props => props.theme.spacing[6]};
+  font-weight: ${props => props.theme.fontWeights.bold};
+  font-family: ${props => props.theme.fonts.display};
+  line-height: 1.2;
+  
+  @media (max-width: ${props => props.theme.breakpoints.md}) {
+    font-size: ${props => props.theme.fontSizes['3xl']};
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    font-size: ${props => props.theme.fontSizes['2xl']};
+    margin-bottom: ${props => props.theme.spacing[4]};
+  }
+`;
+
+const MissionStatement = styled.p`
+  font-size: ${props => props.theme.fontSizes.xl};
+  color: ${props => props.theme.colors.gray[700]};
+  line-height: 1.7;
+  font-weight: ${props => props.theme.fontWeights.medium};
+  margin-bottom: ${props => props.theme.spacing[8]};
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  @media (max-width: ${props => props.theme.breakpoints.md}) {
+    font-size: ${props => props.theme.fontSizes.lg};
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    font-size: ${props => props.theme.fontSizes.base};
+    margin-bottom: ${props => props.theme.spacing[6]};
+    line-height: 1.6;
+  }
+`;
+
+const MissionValues = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: ${props => props.theme.spacing[8]};
+  margin-top: ${props => props.theme.spacing[10]};
+  margin-bottom: ${props => props.theme.spacing[10]};
+  
+  @media (max-width: ${props => props.theme.breakpoints.lg}) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: ${props => props.theme.spacing[6]};
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.md}) {
+    grid-template-columns: 1fr;
+    gap: ${props => props.theme.spacing[5]};
+    margin-top: ${props => props.theme.spacing[8]};
+    margin-bottom: ${props => props.theme.spacing[8]};
+  }
+`;
+
+const MissionValue = styled.div`
+  text-align: center;
+  padding: ${props => props.theme.spacing[8]} ${props => props.theme.spacing[6]};
+  background: ${props => props.theme.colors.white};
+  border-radius: ${props => props.theme.borderRadius.xl};
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid ${props => props.theme.colors.gray[100]};
+  transition: all ${props => props.theme.transitions.base};
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, ${props => props.theme.colors.primary[500]}, ${props => props.theme.colors.primary[600]});
+  }
+  
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  }
+  
+  h3 {
+    font-size: ${props => props.theme.fontSizes.xl};
+    color: ${props => props.theme.colors.primary[800]};
+    margin-bottom: ${props => props.theme.spacing[4]};
+    font-weight: ${props => props.theme.fontWeights.bold};
+    line-height: 1.3;
+  }
+  
+  p {
+    font-size: ${props => props.theme.fontSizes.base};
+    color: ${props => props.theme.colors.gray[600]};
+    line-height: 1.6;
+    font-style: italic;
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    padding: ${props => props.theme.spacing[6]} ${props => props.theme.spacing[4]};
+    
+    h3 {
+      font-size: ${props => props.theme.fontSizes.lg};
+      margin-bottom: ${props => props.theme.spacing[3]};
+    }
+    
+    p {
+      font-size: ${props => props.theme.fontSizes.sm};
+      line-height: 1.5;
+    }
+  }
+`;
+
+const MissionCtaButton = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing[3]};
+  background: linear-gradient(135deg, ${props => props.theme.colors.primary[600]}, ${props => props.theme.colors.primary[700]});
+  color: ${props => props.theme.colors.white};
+  padding: ${props => props.theme.spacing[4]} ${props => props.theme.spacing[8]};
+  border-radius: ${props => props.theme.borderRadius.xl};
+  text-decoration: none;
+  font-weight: ${props => props.theme.fontWeights.bold};
+  font-size: ${props => props.theme.fontSizes.lg};
+  transition: all ${props => props.theme.transitions.base};
+  box-shadow: 0 8px 25px rgba(20, 184, 166, 0.3);
+  border: 2px solid ${props => props.theme.colors.primary[600]};
+  position: relative;
+  overflow: hidden;
+  margin-top: ${props => props.theme.spacing[4]};
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(20, 184, 166, 0.4);
+    background: linear-gradient(135deg, ${props => props.theme.colors.primary[700]}, ${props => props.theme.colors.primary[800]});
+    border-color: ${props => props.theme.colors.primary[700]};
+    
+    &::before {
+      left: 100%;
+    }
+  }
+  
+  &:active {
+    transform: translateY(-1px);
+  }
+  
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    padding: ${props => props.theme.spacing[3]} ${props => props.theme.spacing[6]};
+    font-size: ${props => props.theme.fontSizes.base};
+    margin-top: ${props => props.theme.spacing[3]};
+    
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
 `;
 
 const StatsGrid = styled.div`
@@ -335,12 +761,20 @@ const StatCard = styled.div`
 const ServicesSection = styled.section`
   padding: ${props => props.theme.spacing[16]} 0;
   background: ${props => props.theme.colors.gray[50]};
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    padding: ${props => props.theme.spacing[12]} 0;
+  }
 `;
 
 const SectionContent = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 ${props => props.theme.spacing[4]};
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    padding: 0 ${props => props.theme.spacing[3]};
+  }
 `;
 
 const SectionHeader = styled.div`
@@ -704,6 +1138,37 @@ const TeamMemberImage = styled.div.attrs(props => ({
   }
 `;
 
+const TeamMemberImageSquare = styled.div.attrs(props => ({
+  style: {
+    backgroundImage: `url(${props.image})`
+  }
+}))`
+  width: 300px;
+  height: 300px;
+  border-radius: ${props => props.theme.borderRadius.xl};
+  background-size: cover;
+  background-position: center;
+  margin: 0 auto;
+  border: 4px solid ${props => props.theme.colors.primary[200]};
+  box-shadow: ${props => props.theme.shadows.lg};
+  transition: all ${props => props.theme.transitions.base};
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: ${props => props.theme.shadows.xl};
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.lg}) {
+    width: 250px;
+    height: 250px;
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    width: 200px;
+    height: 200px;
+  }
+`;
+
 const TeamMemberName = styled.h3`
   font-size: ${props => props.theme.fontSizes.xl};
   color: ${props => props.theme.colors.primary[800]};
@@ -729,16 +1194,93 @@ const CalculatorShowcaseSection = styled.section`
   background: linear-gradient(135deg, ${props => props.theme.colors.gray[50]} 0%, ${props => props.theme.colors.gray[100]} 100%);
 `;
 
-const CalculatorShowcaseGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: ${props => props.theme.spacing[12]};
-  align-items: center;
+const CalculatorStepsTitle = styled.h2`
+  text-align: center;
+  color: ${props => props.theme.colors.primary[800]};
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 2.5rem;
+  font-family: ${props => props.theme.fonts.display};
   
-  @media (max-width: ${props => props.theme.breakpoints.lg}) {
-    grid-template-columns: 1fr;
-    gap: ${props => props.theme.spacing[8]};
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    font-size: 2rem;
+    margin-bottom: 2rem;
   }
+`;
+
+const CalculatorStepsGrid = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  
+  @media (max-width: ${props => props.theme.breakpoints.md}) {
+    gap: 1.5rem;
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+`;
+
+const CalculatorStepCard = styled.div`
+  background: ${props => props.theme.colors.white};
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  padding: 2.2rem 2rem;
+  min-width: 260px;
+  max-width: 320px;
+  flex: 1 1 260px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  transition: all ${props => props.theme.transitions.base};
+  border: 1px solid ${props => props.theme.colors.gray[100]};
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    min-width: 280px;
+    max-width: 100%;
+    padding: 2rem 1.5rem;
+  }
+`;
+
+const CalculatorStepNumber = styled.div`
+  color: ${props => props.theme.colors.primary[700]};
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+  font-family: ${props => props.theme.fonts.display};
+`;
+
+const CalculatorStepTitle = styled.div`
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: ${props => props.theme.colors.gray[800]};
+  margin-bottom: 0.3rem;
+  line-height: 1.3;
+`;
+
+const CalculatorStepSubtitle = styled.div`
+  font-size: 1rem;
+  color: ${props => props.theme.colors.gray[600]};
+  font-weight: 400;
+  line-height: 1.4;
+  font-style: italic;
+`;
+
+const CalculatorStepsButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
 `;
 
 const CalculatorShowcaseContent = styled.div`
@@ -1007,33 +1549,13 @@ const BrochureButton = styled.a`
 const Home = () => {
   const [featuredServices, setFeaturedServices] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
 
   const heroSlides = [
     {
       id: 1,
-      title: 'Your Financial Future Starts Here',
-      description: 'At YD Advisory, we provide comprehensive financial solutions tailored to your unique needs. Our expert advisors help you navigate complex financial landscapes and achieve your long-term goals with confidence.',
+      title: 'We turn data into decisions. You turn deals into results.',
+      description: 'From 409A to SPA—valuation, M&A execution, and Fractional CFO support that converts analysis into action.',
       bgImage: '/images/slider/slide-1.jpg'
-    },
-    {
-      id: 2,
-      title: 'Expert Financial Guidance',
-      description: 'With over 9+ years of experience, our founder Yashaswi Das leads our team in delivering personalized financial strategies that help you build wealth and secure your future.',
-      bgImage: '/images/slider/slide-2.jpg'
-    },
-    {
-      id: 3,
-      title: 'Advanced Financial Tools',
-      description: 'Access our comprehensive suite of financial calculators and planning tools to make informed decisions about your investments, retirement, and financial goals.',
-      bgImage: '/images/slider/slide-3.jpg'
-    },
-    {
-      id: 4,
-      title: 'Personalized Service',
-      description: 'We believe in building lasting relationships with our clients. Our dedicated approach ensures you receive the attention and expertise you deserve for your financial success.',
-      bgImage: '/images/slider/slide-4.jpg'
     }
   ];
 
@@ -1042,58 +1564,56 @@ const Home = () => {
     setFeaturedServices([
       {
         id: 1,
-        title: 'Business Valuations & 409A Valuation',
-        description: 'Independent, audit-ready valuations built for fundraises, ESOPs, and compliance.',
+        title: 'Business & Complex Valuations (incl. 409A)',
+        description: 'Independent, defensible valuations for fundraises, ESOPs, compliance, and strategic decisions—using DCF, comparables, and precedent transactions. Deliverables include a clear methodology write-up, sensitivity tables, and a board-ready summary.',
         icon: 'FiDollarSign',
         image: '/images/services/img-1.jpg',
         slug: 'business-valuations-409a'
       },
       {
         id: 2,
-        title: 'Advanced Financial Modelling & Forecasting',
-        description: 'Investor-grade three-statement models, sensitivity scenarios, and unit economics.',
+        title: 'Financial Modelling & Forecasting',
+        description: 'Investor-grade three-statement models, unit economics, and multi-scenario analysis that quantify drivers and risk. Built for capital raises, budgeting, and M&A.',
         icon: 'FiBarChart',
         image: '/images/services/img-2.jpg',
         slug: 'financial-modelling-forecasting'
       },
       {
         id: 3,
-        title: 'M&A Advisory',
-        description: 'Comprehensive M&A support including red-flag diligence and transaction structuring for successful deal execution.',
+        title: 'M&A Advisory (Buy- & Sell-Side)',
+        description: 'Hands-on support across the deal lifecycle—target screening, red-flag diligence, SPA/PPA modelling, working-capital analysis, and integration planning. We help you articulate value drivers and negotiate with confidence.',
         icon: 'FiBriefcase',
         image: '/images/services/img-3.jpg',
         slug: 'ma-advisory'
+      },
+      {
+        id: 4,
+        title: 'Transaction Advisory & Due Diligence',
+        description: 'Focused QoE reviews, data-room preparation, and issue lists that keep timelines tight and surprises low—so you can move from indicative offers to close faster.',
+        icon: 'FiTarget',
+        image: '/images/services/img-4.jpg',
+        slug: 'transaction-advisory'
+      },
+      {
+        id: 5,
+        title: 'Fractional CFO & Board Support',
+        description: 'Senior finance leadership—KPI packs, board reporting, capital strategy, fair-value roll-forwards, and investor updates—without the full-time overhead.',
+        icon: 'FiUsers',
+        image: '/images/services/img-5.jpg',
+        slug: 'fractional-cfo'
+      },
+      {
+        id: 6,
+        title: 'Fundraising Support (Equity & Debt)',
+        description: 'Pitch-deck refinement, cap-table design, term-sheet advisory, and lender packages—everything required to run a professional, founder-friendly process.',
+        icon: 'FiTrendingUp',
+        image: '/images/services/img-6.jpg',
+        slug: 'fundraising-support'
       }
     ]);
     setLoading(false);
   }, []);
 
-  // Auto-slide functionality
-  useEffect(() => {
-    if (!isPlaying) return;
-
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [isPlaying, heroSlides.length]);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
-  };
-
-  const goToSlide = (index) => {
-    setCurrentSlide(index);
-  };
-
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
 
   const iconMap = {
     FiTrendingUp,
@@ -1115,131 +1635,75 @@ const Home = () => {
         structuredData={[organizationSchema, websiteSchema, localBusinessSchema]}
       />
       
-      {/* Hero Section with Slider */}
+      {/* Hero Section */}
       <HeroSection>
-        <AnimatePresence mode="wait">
-          <HeroSlide
-            key={currentSlide}
-            bgImage={heroSlides[currentSlide].bgImage}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <HeroContent>
-              <motion.h1
-                key={`title-${currentSlide}`}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-              >
-                {heroSlides[currentSlide].title}
-              </motion.h1>
-              <motion.p
-                key={`description-${currentSlide}`}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                {heroSlides[currentSlide].description}
-              </motion.p>
-              <motion.div
-                key={`buttons-${currentSlide}`}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                <CtaButtons>
-                  <PrimaryButton to="/contact">
-                    Get Free Consultation <FiArrowRight />
-                  </PrimaryButton>
-                  <SecondaryButton to="/calculator">
-                    Financial Calculator <FiArrowRight />
-                  </SecondaryButton>
-                </CtaButtons>
-              </motion.div>
-            </HeroContent>
-          </HeroSlide>
-        </AnimatePresence>
-
-        <HeroControls>
-          <HeroNavButton onClick={prevSlide}>
-            <FiChevronLeft />
-          </HeroNavButton>
-          
-          <HeroDots>
-            {heroSlides.map((_, index) => (
-              <HeroDot
-                key={index}
-                active={index === currentSlide}
-                onClick={() => goToSlide(index)}
-              />
-            ))}
-          </HeroDots>
-          
-          <PlayPauseButton onClick={togglePlayPause}>
-            {isPlaying ? <FiPause /> : <FiPlay />}
-          </PlayPauseButton>
-          
-          <HeroNavButton onClick={nextSlide}>
-            <FiChevronRight />
-          </HeroNavButton>
-        </HeroControls>
+        <HeroSlide
+          style={{
+            backgroundImage: `url(${heroSlides[0].bgImage})`
+          }}
+        >
+          <HeroContent>
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              {heroSlides[0].title}
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              {heroSlides[0].description}
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <CtaButtons>
+                <PrimaryButton to="/contact">
+                  Get Free Consultation <FiArrowRight />
+                </PrimaryButton>
+                <SecondaryButton to="/calculator">
+                  YD Valuator <FiArrowRight />
+                </SecondaryButton>
+              </CtaButtons>
+            </motion.div>
+          </HeroContent>
+        </HeroSlide>
       </HeroSection>
 
-      {/* Stats Section */}
-      <StatsSection>
-        <StatsGrid>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <StatCard>
-              <FiUsers />
-              <h3>50+</h3>
-              <p>Clients</p>
-            </StatCard>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            viewport={{ once: true }}
-          >
-            <StatCard>
-              <FiTrendingUp />
-              <h3>$100M+</h3>
-              <p>Capital Supported</p>
-            </StatCard>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <StatCard>
-              <FiAward />
-              <h3>9+</h3>
-              <p>Geographies</p>
-            </StatCard>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            viewport={{ once: true }}
-          >
-            <StatCard>
-              <FiCheckCircle />
-              <h3>9+</h3>
-              <p>Sectors Covered</p>
-            </StatCard>
-          </motion.div>
-        </StatsGrid>
-      </StatsSection>
+      {/* Promotional Section */}
+      <PromoSection>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <PromoCard>
+            <PromoIcon>
+              <FiBarChart />
+            </PromoIcon>
+            <PromoTitle>Want to join the list?</PromoTitle>
+            <PromoDescription>
+              Discover your startup's valuation with our AI-powered YD Valuator and claim your spot!
+            </PromoDescription>
+            <PromoBenefits>
+              <PromoBenefit>Free evaluation</PromoBenefit>
+              <PromoBenefit>AI-powered SWOT analysis</PromoBenefit>
+              <PromoBenefit>Instant results</PromoBenefit>
+            </PromoBenefits>
+            <PromoButton to="/calculator">
+              <FiBarChart />
+              Start Now - Free!
+              <FiArrowRight />
+            </PromoButton>
+          </PromoCard>
+        </motion.div>
+      </PromoSection>
 
       {/* Services Section */}
       <ServicesSection>
@@ -1251,7 +1715,7 @@ const Home = () => {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              Our Financial Services
+              YD Advisory Services
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 30 }}
@@ -1259,8 +1723,7 @@ const Home = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              Comprehensive financial solutions designed to help you achieve your goals 
-              and secure your future with expert guidance.
+              We deliver Fractional CFO, valuation, M&A, and corporate finance that turns analysis into action—built to hold up in boardrooms and negotiations. All work is IVSC-aligned and audit-ready, with clear assumptions, sensitivities, and executive summaries.
             </motion.p>
           </SectionHeader>
 
@@ -1334,7 +1797,7 @@ const Home = () => {
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
               >
-                Why Choose YD Advisory?
+                Why YD Advisory?
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0, x: -30 }}
@@ -1342,9 +1805,9 @@ const Home = () => {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 viewport={{ once: true }}
               >
-                We combine decades of financial expertise with cutting-edge technology 
-                to deliver personalized solutions that help you achieve your financial 
-                goals with confidence and clarity.
+                Because deals move when numbers are credible and the story is clear. 
+                We deliver IVSC-aligned valuations, decision-ready models, and transaction 
+                execution that convert strategy into results.
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
@@ -1355,23 +1818,15 @@ const Home = () => {
                 <FeaturesList>
                   <FeatureItem>
                     <FiCheckCircle />
-                    <span>Personalized financial strategies tailored to your unique situation</span>
+                    <span>Raise smarter (409A, cap tables, investor decks)</span>
                   </FeatureItem>
                   <FeatureItem>
                     <FiCheckCircle />
-                    <span>Transparent fee structure with no hidden costs</span>
+                    <span>Buy and sell with conviction (diligence, SPA/PPA, integration)</span>
                   </FeatureItem>
                   <FeatureItem>
                     <FiCheckCircle />
-                    <span>Regular portfolio reviews and performance monitoring</span>
-                  </FeatureItem>
-                  <FeatureItem>
-                    <FiCheckCircle />
-                    <span>Access to advanced financial tools and resources</span>
-                  </FeatureItem>
-                  <FeatureItem>
-                    <FiCheckCircle />
-                    <span>Dedicated relationship manager for ongoing support</span>
+                    <span>Operate with clarity (CFO stewardship, KPI packs, fair-value updates)</span>
                   </FeatureItem>
                 </FeaturesList>
               </motion.div>
@@ -1400,6 +1855,66 @@ const Home = () => {
           </TwoColumnGrid>
         </SectionContent>
       </WhyChooseUsSection>
+
+      {/* Whom We Serve Section */}
+      <MissionSection>
+        <MissionContainer>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <MissionContent>
+              <MissionIcon>
+                <FiUsers />
+              </MissionIcon>
+              <MissionTitle>Whom We Serve</MissionTitle>
+              <MissionStatement>
+                We provide specialized financial expertise across the entire ecosystem, from startups to established enterprises.
+              </MissionStatement>
+              <MissionValues>
+                <MissionValue>
+                  <h3>For Founders & Entrepreneurs</h3>
+                  <p>From "what's my company worth?" to "how do we close this round?"—we turn numbers into a valuation you can defend and a story investors buy.</p>
+                </MissionValue>
+                <MissionValue>
+                  <h3>For CFOs & Finance Leaders</h3>
+                  <p>Board-ready models, KPI packs, and fair-value updates—plus a fractional lift when you need senior capacity without the full-time cost for all financial needs for a company.</p>
+                </MissionValue>
+                <MissionValue>
+                  <h3>For Investors & Family Offices</h3>
+                  <p>Buy, sell, or hold with conviction—IVSC-aligned valuations, red-flag diligence, SPA/PPA modelling, and post-deal integration support.</p>
+                </MissionValue>
+                <MissionValue>
+                  <h3>For SMEs & Boards</h3>
+                  <p>Clear options, not noise—feasibility papers, scenario analysis, working-capital reviews, and decision memos that move the agenda.</p>
+                </MissionValue>
+                <MissionValue>
+                  <h3>For Private Equity and VC Funds</h3>
+                  <p>Fast, defensible workstreams—screening, unit economics, QoE-style reviews, and complex security pricing that stands up in IC.</p>
+                </MissionValue>
+                <MissionValue>
+                  <h3>For Lenders & Credit Teams</h3>
+                  <p>Reliable covenant math and borrower models—stress tests, cash-flow forecasts, and collateral valuations that reduce surprises.</p>
+                </MissionValue>
+              </MissionValues>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                viewport={{ once: true }}
+                style={{ textAlign: 'center', marginTop: '2rem' }}
+              >
+                <MissionCtaButton to="/calculator">
+                  Try YD Valuator <FiArrowRight />
+                </MissionCtaButton>
+              </motion.div>
+            </MissionContent>
+          </motion.div>
+        </MissionContainer>
+      </MissionSection>
 
       {/* Blog Section */}
       <BlogSection>
@@ -1508,111 +2023,74 @@ const Home = () => {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 viewport={{ once: true }}
               >
-                Yashaswi Das, a Chartered Accountant (ICAI) and CFA Charter holder, brings 8+ years of frontline deal experience from JPMorgan and Dubai Holding. 
-                He delivers investment-bank-grade analytics with boutique agility, helping founders, family offices, and investors make confident financial decisions.
+                Yashaswi Das — Founder & Principal
+                <br /><br />
+                What she delivers: Defensible valuations (409A, complex, IP/PPA) · Decision-ready models (3-statement, scenarios, Monte-Carlo) · Hands-on M&A (red-flag diligence, SPA/PPA, integration). – (More information in about page)
               </motion.p>
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                viewport={{ once: true }}
-              >
-                <PrimaryButton to="/team">
-                  Meet Our Expert <FiArrowRight />
-                </PrimaryButton>
-              </motion.div>
             </TeamShowcaseContent>
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <TeamMemberCard>
-                <TeamMemberImage image="/images/team/Yashaswi-Das.jpg" />
-                <TeamMemberName>Yashaswi Das</TeamMemberName>
-                <TeamMemberPosition>CEO & Founder</TeamMemberPosition>
-                <TeamMemberBio>
-                  Specializing in business valuations, M&A execution, and cross-border structuring for transactions in the USD 2M–50M range. 
-                  Delivers audit-ready valuations and bespoke transaction support that meet IVSC standards.
-                </TeamMemberBio>
-              </TeamMemberCard>
-            </motion.div>
+             <motion.div
+               initial={{ opacity: 0, x: 30 }}
+               whileInView={{ opacity: 1, x: 0 }}
+               transition={{ duration: 0.6 }}
+               viewport={{ once: true }}
+             >
+               <TeamMemberImageSquare image="/images/team/Yashaswi-Das.jpg" />
+             </motion.div>
           </TeamShowcaseGrid>
         </SectionContent>
       </TeamShowcaseSection>
 
       {/* Calculator Showcase Section */}
-      <CalculatorShowcaseSection>
-        <SectionContent>
-          <CalculatorShowcaseGrid>
+        <CalculatorShowcaseSection>
+          <SectionContent>
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <CalculatorPreview>
-                <CalculatorIcon>
-                  <FiBarChart />
-                </CalculatorIcon>
-                <CalculatorTitle>YD Valuator</CalculatorTitle>
-                <CalculatorDescription>
-                  Professional business valuation calculator powered by investment-bank-grade analytics. 
-                  Get instant, audit-ready valuations for transactions in the USD 2M–50M range with IVSC compliance.
-                </CalculatorDescription>
-                <PrimaryButton to="/calculator">
+              <CalculatorStepsTitle>Evaluate your startup</CalculatorStepsTitle>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <CalculatorStepsGrid>
+                <CalculatorStepCard>
+                  <CalculatorStepNumber>1</CalculatorStepNumber>
+                  <CalculatorStepTitle>Answer targeted questions</CalculatorStepTitle>
+                  <CalculatorStepSubtitle>Customized to your startup's stage<br/>(pre-seed, seed)</CalculatorStepSubtitle>
+                </CalculatorStepCard>
+                <CalculatorStepCard>
+                  <CalculatorStepNumber>2</CalculatorStepNumber>
+                  <CalculatorStepTitle>Get automatic valuation</CalculatorStepTitle>
+                  <CalculatorStepSubtitle>Based on real market data</CalculatorStepSubtitle>
+                </CalculatorStepCard>
+                <CalculatorStepCard>
+                  <CalculatorStepNumber>3</CalculatorStepNumber>
+                  <CalculatorStepTitle>Gain actionable insights</CalculatorStepTitle>
+                  <CalculatorStepSubtitle>To improve your business value</CalculatorStepSubtitle>
+                </CalculatorStepCard>
+              </CalculatorStepsGrid>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
+              <CalculatorStepsButtonWrapper>
+                <PrimaryButton to="/calculator" style={{ fontSize: '1.1rem', padding: '18px 40px', borderRadius: 14, fontWeight: 700 }}>
                   Try YD Valuator <FiArrowRight />
                 </PrimaryButton>
-              </CalculatorPreview>
+              </CalculatorStepsButtonWrapper>
             </motion.div>
-            <CalculatorShowcaseContent>
-              <motion.h2
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-              >
-                Professional Business Valuation
-              </motion.h2>
-              <motion.p
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                viewport={{ once: true }}
-              >
-                Our YD Valuator delivers investment-bank-grade business valuations with boutique agility. 
-                Perfect for founders, family offices, and investors seeking audit-ready valuations for M&A, fundraising, and strategic decisions.
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                viewport={{ once: true }}
-              >
-                <FeaturesList>
-                  <FeatureItem>
-                    <FiCheckCircle />
-                    <span>Business Valuation Models</span>
-                  </FeatureItem>
-                  <FeatureItem>
-                    <FiCheckCircle />
-                    <span>M&A Transaction Support</span>
-                  </FeatureItem>
-                  <FeatureItem>
-                    <FiCheckCircle />
-                    <span>IVSC Compliant Reports</span>
-                  </FeatureItem>
-                  <FeatureItem>
-                    <FiCheckCircle />
-                    <span>Audit-Ready Documentation</span>
-                  </FeatureItem>
-                </FeaturesList>
-              </motion.div>
-            </CalculatorShowcaseContent>
-          </CalculatorShowcaseGrid>
-        </SectionContent>
-      </CalculatorShowcaseSection>
+          </SectionContent>
+        </CalculatorShowcaseSection>
 
       {/* Contact Preview Section */}
       <ContactPreviewSection>
@@ -1656,19 +2134,15 @@ const Home = () => {
               <ContactInfo>
                 <ContactItem>
                   <FiPhone />
-                  <span>+91 70576 73562</span>
+                  <span>+971-528477349</span>
                 </ContactItem>
                 <ContactItem>
                   <FiMail />
-                  <span>info@ydadvisory.com</span>
+                  <span>Yashaswi.das@ydadvisory.ae</span>
                 </ContactItem>
                 <ContactItem>
                   <FiMapPin />
-                  <span>123 Financial District, New York, NY 10004</span>
-                </ContactItem>
-                <ContactItem>
-                  <FiClock />
-                  <span>Mon-Fri: 9AM-6PM EST</span>
+                  <span>Level 41, Emirates Tower – DIFC, Near Trade Center – Dubai, UAE</span>
                 </ContactItem>
               </ContactInfo>
             </motion.div>

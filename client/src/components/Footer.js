@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiPhone, FiMail, FiMapPin, FiClock } from 'react-icons/fi';
+import { FiArrowRight, FiPhone, FiMail, FiMapPin, FiClock, FiLinkedin, FiTwitter, FiFacebook } from 'react-icons/fi';
 
 const FooterContainer = styled.footer`
   background: ${props => props.theme.colors.primary[900]};
@@ -231,7 +231,8 @@ const Footer = () => {
                 style={{ 
                   height: '50px', 
                   width: 'auto',
-                  objectFit: 'contain'
+                  objectFit: 'contain',
+                  filter: 'brightness(0) invert(1)'
                 }}
               />
             </FooterLogo>
@@ -241,13 +242,13 @@ const Footer = () => {
             </p>
             <SocialLinks>
               <a href="https://linkedin.com/company/yd-advisory" aria-label="LinkedIn">
-                <FiArrowRight />
+                <FiLinkedin />
               </a>
               <a href="https://twitter.com/ydadvisory" aria-label="Twitter">
-                <FiArrowRight />
+                <FiTwitter />
               </a>
               <a href="https://facebook.com/ydadvisory" aria-label="Facebook">
-                <FiArrowRight />
+                <FiFacebook />
               </a>
             </SocialLinks>
           </FooterSection>
@@ -258,7 +259,6 @@ const Footer = () => {
               <li><Link to="/">Home</Link></li>
               <li><Link to="/about">About Us</Link></li>
               <li><Link to="/services">Services</Link></li>
-              <li><Link to="/team">Our Team</Link></li>
               <li><Link to="/blog">Blog</Link></li>
               <li><Link to="/contact">Contact</Link></li>
             </FooterLinks>
@@ -270,7 +270,7 @@ const Footer = () => {
               <li><Link to="/services/investment-management">Investment Management</Link></li>
               <li><Link to="/services/financial-planning">Financial Planning</Link></li>
               <li><Link to="/services/risk-assessment">Risk Assessment</Link></li>
-              <li><Link to="/services/tax-planning">Tax Planning</Link></li>
+              <li><Link to="/services/tax-planning">succession planning</Link></li>
               <li><Link to="/services/estate-planning">Estate Planning</Link></li>
               <li><Link to="/services/business-consulting">Business Consulting</Link></li>
             </FooterLinks>
@@ -281,19 +281,15 @@ const Footer = () => {
             <ContactInfo>
               <div className="contact-item">
                 <FiMapPin />
-                <span>Emirates Tower, Trade Centre -<br />DIFC, Dubai, UAE</span>
+                <span>Level 41, Emirates Tower – DIFC,<br />Near Trade Center – Dubai, UAE</span>
               </div>
               <div className="contact-item">
                 <FiPhone />
-                <span>+91 70576 73562</span>
+                <span>+971-528477349</span>
               </div>
               <div className="contact-item">
                 <FiMail />
-                <span>yashaswi.das@ydadvisory.ae</span>
-              </div>
-              <div className="contact-item">
-                <FiClock />
-                <span>Mon-Fri: 9AM-6PM</span>
+                <span>Yashaswi.das@ydadvisory.ae</span>
               </div>
             </ContactInfo>
             
@@ -315,7 +311,7 @@ const Footer = () => {
         </FooterGrid>
 
         <FooterBottom>
-          <p>&copy; 2024 YD Advisory. All rights reserved.</p>
+          <p>&copy; 2025 YD Advisory. All rights reserved.</p>
           <div className="footer-links">
             <Link to="/privacy">Privacy Policy</Link>
             <Link to="/terms">Terms of Service</Link>

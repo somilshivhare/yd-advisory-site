@@ -58,7 +58,7 @@ const SEO = ({
       <meta name="ICBM" content="25.2048, 55.2708" />
       
       {/* Business Information */}
-      <meta name="business:contact_data:street_address" content="Emirates Tower, Trade Centre - DIFC" />
+      <meta name="business:contact_data:street_address" content="Level 41, Emirates Tower – DIFC, Near Trade Center" />
       <meta name="business:contact_data:locality" content="Dubai" />
       <meta name="business:contact_data:region" content="Dubai" />
       <meta name="business:contact_data:postal_code" content="00000" />

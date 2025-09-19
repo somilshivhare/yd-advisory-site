@@ -14,6 +14,9 @@ const HeaderContainer = styled.header`
   backdrop-filter: ${props => props.scrolled ? 'blur(10px)' : 'none'};
   transition: all ${props => props.theme.transitions.base};
   border-bottom: ${props => props.scrolled ? `1px solid ${props.theme.colors.primary[200]}` : 'none'};
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 `;
 
 const TopBar = styled.div`
@@ -87,6 +90,9 @@ const HeaderContent = styled.div`
   margin: 0 auto;
   padding: 0 ${props => props.theme.spacing[4]};
   width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+  overflow-x: hidden;
   
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
     padding: 0 ${props => props.theme.spacing[3]};
@@ -404,15 +410,11 @@ const Header = () => {
           <ContactInfo>
             <ContactItem>
               <FiPhone />
-              <span>+91 70576 73562</span>
+              <span>+971-528477349</span>
             </ContactItem>
             <ContactItem>
               <FiMail />
-              <span>yashaswi.das@ydadvisory.ae</span>
-            </ContactItem>
-            <ContactItem>
-              <FiClock />
-              <span>Mon-Fri: 9AM-6PM</span>
+              <span>Yashaswi.das@ydadvisory.ae</span>
             </ContactItem>
           </ContactInfo>
           <SocialLinks>
@@ -455,18 +457,18 @@ const Header = () => {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/team" className={location.pathname === '/team' ? 'active' : ''}>
-                  Team
-                </NavLink>
-              </NavItem>
-              <NavItem>
                 <NavLink to="/blog" className={location.pathname.startsWith('/blog') ? 'active' : ''}>
                   Blog
                 </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink to="/calculator" className={location.pathname === '/calculator' ? 'active' : ''}>
-                  Calculator
+                  YD Valuator
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink to="/transparency" className={location.pathname === '/transparency' ? 'active' : ''}>
+                  Transparency
                 </NavLink>
               </NavItem>
               <NavItem>
@@ -514,13 +516,13 @@ const Header = () => {
                 <MobileNavLink to="/services">Services</MobileNavLink>
               </MobileNavItem>
               <MobileNavItem>
-                <MobileNavLink to="/team">Team</MobileNavLink>
-              </MobileNavItem>
-              <MobileNavItem>
                 <MobileNavLink to="/blog">Blog</MobileNavLink>
               </MobileNavItem>
               <MobileNavItem>
-                <MobileNavLink to="/calculator">Calculator</MobileNavLink>
+                <MobileNavLink to="/calculator">YD Valuator</MobileNavLink>
+              </MobileNavItem>
+              <MobileNavItem>
+                <MobileNavLink to="/transparency">Transparency</MobileNavLink>
               </MobileNavItem>
               <MobileNavItem>
                 <MobileNavLink to="/contact">Contact</MobileNavLink>

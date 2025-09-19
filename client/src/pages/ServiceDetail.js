@@ -889,11 +889,11 @@ const ServiceDetail = () => {
             <ContactInfo>
               <ContactItem>
                 <FiPhone />
-                <span>+91 70576 73562</span>
+                <span>+971-528477349</span>
               </ContactItem>
               <ContactItem>
                 <FiMail />
-                <span>info@ydadvisory.com</span>
+                <span>Yashaswi.das@ydadvisory.ae</span>
               </ContactItem>
               <ContactItem>
                 <FiCalendar />
